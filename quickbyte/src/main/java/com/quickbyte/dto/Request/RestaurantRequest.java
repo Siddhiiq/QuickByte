@@ -10,9 +10,6 @@ import lombok.*;
 @Builder
 public class RestaurantRequest {
 
-    @NotNull(message = "Owner ID is required")
-    private Long ownerId;
-
     @NotBlank(message = "Restaurant name is required")
     @Size(max = 100)
     private String name;

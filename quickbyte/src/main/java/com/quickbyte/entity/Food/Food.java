@@ -9,7 +9,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.quickbyte.entity.Review.Review;
 
 @Entity
 @Table(name = "foods")
@@ -49,13 +48,14 @@ public class Food extends BaseEntity {
     @Column(nullable = false)
     private Integer totalReviews;
 
+    // NEW
+    @Column(nullable = false)
+    private Double price;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    /*
-        Next Batch
-     */
     @OneToMany(
             mappedBy = "food",
             cascade = CascadeType.ALL,
@@ -64,6 +64,7 @@ public class Food extends BaseEntity {
     )
     @Builder.Default
     private List<FoodAddon> addons = new ArrayList<>();
+
     @OneToMany(
             mappedBy = "food",
             cascade = CascadeType.ALL,
@@ -72,6 +73,7 @@ public class Food extends BaseEntity {
     )
     @Builder.Default
     private List<FoodImage> images = new ArrayList<>();
+
     @OneToMany(
             mappedBy = "food",
             cascade = CascadeType.ALL,
@@ -105,5 +107,4 @@ public class Food extends BaseEntity {
         }
 
     }
-
 }

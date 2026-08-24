@@ -1,4 +1,4 @@
-package com.quickbyte.dto;
+package com.quickbyte.dto.Request;
 
 import com.quickbyte.enums.FoodType;
 import jakarta.validation.constraints.*;
@@ -29,10 +29,13 @@ public class FoodRequest {
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
+    private Double price;
+
     @Builder.Default
     private Boolean bestSeller = false;
 
     @Builder.Default
     private Boolean recommended = false;
-
 }

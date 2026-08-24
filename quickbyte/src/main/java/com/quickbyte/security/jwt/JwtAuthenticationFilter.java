@@ -25,37 +25,76 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
+
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain)
+
             throws ServletException, IOException {
 
+        System.out.println("===== JWT FILTER EXECUTED =====");
+        System.out.println("Request Path : " + request.getServletPath());
+
         String requestPath = request.getServletPath();
+        String method = request.getMethod();
 
         /*
          * Public APIs
-         */if (requestPath.startsWith("/api/v1/users")
-                || requestPath.startsWith("/api/v1/restaurants")
-                || requestPath.startsWith("/api/v1/categories")
-                || requestPath.startsWith("/api/v1/foods")
-                || requestPath.startsWith("/api/v1/food-variants")
-                || requestPath.startsWith("/api/v1/food-images")
-                || requestPath.startsWith("/api/v1/cart")
-                || requestPath.startsWith("/api/v1/orders")
-                || requestPath.startsWith("/api/v1/payments")
-                || requestPath.startsWith("/api/v1/coupons")
-                || requestPath.startsWith("/api/v1/reviews")
-                || requestPath.startsWith("/api/v1/delivery")
-                || requestPath.startsWith("/api/v1/admin"))
-         {
+         *
+         * These APIs should not go through JWT authentication.
+         */
+        if (requestPath.equals("/api/v1/users/register")
+                || requestPath.equals("/api/v1/users/login")
+                || requestPath.equals("/api/v1/users/refresh-token")
+
+                || requestPath.startsWith("/api/v1/email")
+                || requestPath.startsWith("/api/v1/auth")
+
+                || requestPath.startsWith("/v3/api-docs")
+                || requestPath.startsWith("/swagger-ui")
+                || requestPath.startsWith("/swagger-resources")
+                || requestPath.startsWith("/webjars")
+
+                /*
+                 * Public restaurant/menu GET APIs
+                 */
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/restaurants"))
+
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/categories"))
+
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/foods"))
+
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/food-variants"))
+
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/food-images"))
+
+                || (method.equals("GET")
+                && requestPath.startsWith("/api/v1/food-addons"))) {
+
+            System.out.println(
+                    "===== PUBLIC API - JWT SKIPPED =====");
 
             filterChain.doFilter(request, response);
             return;
         }
 
+        /*
+         * Get Authorization header
+         */
         final String authHeader =
                 request.getHeader("Authorization");
 
+        System.out.println(
+                "Authorization Header : " + authHeader);
+
+        /*
+         * No token
+         */
         if (authHeader == null
                 || !authHeader.startsWith("Bearer ")) {
 
@@ -63,12 +102,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        /*
+         * Extract JWT
+         */
         String jwtToken =
                 authHeader.substring(7);
 
         String email =
                 jwtService.extractUsername(jwtToken);
 
+        /*
+         * Authenticate user
+         */
         if (email != null
                 && SecurityContextHolder
                 .getContext()
@@ -77,45 +122,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails =
                     customUserDetailsService
                             .loadUserByUsername(email);
-            String role = jwtService.extractRole(jwtToken);
 
-// Optional debug
-            System.out.println("Authenticated User : " + email);
-            System.out.println("Role : " + role);
+            String role =
+                    jwtService.extractRole(jwtToken);
+
+            System.out.println(
+                    "Authenticated User : " + email);
+
+            System.out.println(
+                    "JWT Role : " + role);
+
+            System.out.println(
+                    "Authorities : "
+                            + userDetails.getAuthorities());
 
             if (jwtService.isTokenValid(
                     jwtToken,
                     userDetails.getUsername())) {
 
-                UsernamePasswordAuthenticationToken authenticationToken =
+                UsernamePasswordAuthenticationToken
+                        authenticationToken =
                         new UsernamePasswordAuthenticationToken(
 
                                 userDetails,
-
                                 null,
-
                                 userDetails.getAuthorities()
-
                         );
 
                 authenticationToken.setDetails(
-
                         new WebAuthenticationDetailsSource()
-
                                 .buildDetails(request)
-
                 );
 
                 SecurityContextHolder
                         .getContext()
-                        .setAuthentication(authenticationToken);
-
+                        .setAuthentication(
+                                authenticationToken
+                        );
             }
-
         }
 
         filterChain.doFilter(request, response);
-
     }
-
 }

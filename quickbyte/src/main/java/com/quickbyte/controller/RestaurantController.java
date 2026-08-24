@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/restaurants")
@@ -20,11 +21,19 @@ public class RestaurantController {
      * Create Restaurant
      */
     @PostMapping
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponse createRestaurant(
             @Valid @RequestBody RestaurantRequest request) {
 
         return restaurantService.createRestaurant(request);
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
+    public RestaurantResponse getMyRestaurant() {
+
+        return restaurantService.getMyRestaurant();
     }
     /**
      * Get Restaurant By Id
@@ -83,6 +92,7 @@ public class RestaurantController {
      * Update Restaurant
      */
     @PutMapping("/{restaurantId}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public RestaurantResponse updateRestaurant(
 
             @PathVariable Long restaurantId,
@@ -97,10 +107,8 @@ public class RestaurantController {
         );
     }
 
-    /**
-     * Delete Restaurant
-     */
     @DeleteMapping("/{restaurantId}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRestaurant(
             @PathVariable Long restaurantId) {

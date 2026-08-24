@@ -20,10 +20,18 @@ public class FoodAddonRequest {
     private String name;
 
     @NotNull(message = "Price is required")
-    @DecimalMin(value = "0.0")
+    @DecimalMin(
+            value = "0.01",
+            message = "Price must be greater than 0"
+    )
     private BigDecimal price;
 
+    @NotNull(message = "Available status is required")
     private Boolean available;
 
+    @NotNull(message = "Display order is required")
+    @Positive(
+            message = "Display order must be greater than 0"
+    )
     private Integer displayOrder;
 }

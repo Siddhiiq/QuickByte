@@ -17,11 +17,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpMethod;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
 @Configuration
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -64,19 +68,31 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable())
 
+                .cors(cors -> {})
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-
                         // Public APIs
                         .requestMatchers(
                                 "/api/v1/users/register",
                                 "/api/v1/users/login",
-                                "/api/v1/email/**"
+                                "/api/v1/users/refresh-token",
+                                "/api/v1/email/**",
+                                "/api/v1/redis/**",
 
-                        ).permitAll()
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/api/v1/images/upload",
+                                "/api/v1/auth/send-otp",
+                                "/api/v1/auth/verify-otp",
+                                "/api/v1/auth/forgot-password",
+                                "/api/v1/auth/reset-password"
+                        )
+                        .permitAll()
 
                         // Customer
                         .requestMatchers("/api/v1/cart/**")
@@ -91,16 +107,36 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/reviews/**")
                         .hasAnyRole("CUSTOMER", "ADMIN")
 
-                        // Restaurant Owner
-                        .requestMatchers(
-                                "/api/v1/restaurants/**",
-                                "/api/v1/categories/**",
-                                "/api/v1/foods/**",
-                                "/api/v1/food-variants/**",
-                                "/api/v1/food-images/**",
-                                "/api/v1/food-addons/**"
-                        )
-                        .hasAnyRole("RESTAURANT_OWNER", "ADMIN")
+                                // Public restaurant/menu read APIs
+                                .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/**")
+                                .permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/categories/**")
+                                .permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/foods/**")
+                                .permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/food-variants/**")
+                                .permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/food-images/**")
+                                .permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/api/v1/food-addons/**")
+                                .permitAll()
+
+
+// Restaurant Owner / Admin write APIs
+                                .requestMatchers(
+                                        "/api/v1/restaurants/**",
+                                        "/api/v1/categories/**",
+                                        "/api/v1/foods/**",
+                                        "/api/v1/food-variants/**",
+                                        "/api/v1/food-images/**",
+                                        "/api/v1/food-addons/**"
+                                )
+                                .hasAnyRole("RESTAURANT_OWNER", "ADMIN")
 
                         // Delivery Partner
                         .requestMatchers("/api/v1/delivery/**")

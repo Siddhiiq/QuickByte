@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -16,6 +17,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentResponse createPayment(
             @Valid @RequestBody PaymentRequest request){
@@ -24,6 +26,7 @@ public class PaymentController {
     }
 
     @GetMapping("/{orderId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public PaymentResponse getPayment(
             @PathVariable Long orderId){
 

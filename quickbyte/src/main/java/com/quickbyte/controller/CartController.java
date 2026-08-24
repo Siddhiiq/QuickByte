@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -16,6 +17,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/items")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @ResponseStatus(HttpStatus.CREATED)
     public CartResponse addItemToCart(
             @Valid @RequestBody CartItemRequest request) {
@@ -24,6 +26,7 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public CartResponse getCart(
             @PathVariable Long userId) {
 
@@ -31,6 +34,7 @@ public class CartController {
     }
 
     @DeleteMapping("/items/{cartItemId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public CartResponse removeItem(
             @PathVariable Long cartItemId,
             @RequestParam Long userId) {
@@ -39,9 +43,24 @@ public class CartController {
     }
 
     @DeleteMapping("/clear/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public CartResponse clearCart(
             @PathVariable Long userId) {
 
         return cartService.clearCart(userId);
+    }
+
+    @PutMapping("/items/{cartItemId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public CartResponse updateItemQuantity(
+            @PathVariable Long cartItemId,
+            @RequestParam Long userId,
+            @RequestParam Integer quantity) {
+
+        return cartService.updateItemQuantity(
+                userId,
+                cartItemId,
+                quantity
+        );
     }
 }

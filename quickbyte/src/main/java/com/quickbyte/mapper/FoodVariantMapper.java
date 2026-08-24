@@ -18,8 +18,8 @@ public class FoodVariantMapper {
                 .variantType(request.getVariantType())
                 .price(request.getPrice())
                 .stock(request.getStock())
+                .available(request.getStock() > 0)
                 .build();
-
     }
 
     public static FoodVariantResponse toResponse(
@@ -34,7 +34,5 @@ public class FoodVariantMapper {
                 .stock(variant.getStock())
                 .available(variant.getAvailable())
                 .build();
-
     }
-
 }

@@ -17,5 +17,9 @@ public interface CartService {
 
     CartResponse clearCart(
             Long userId);
+    CartResponse updateItemQuantity(
+            Long userId,
+            Long cartItemId,
+            Integer quantity);
 
 }

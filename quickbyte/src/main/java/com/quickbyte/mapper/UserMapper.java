@@ -17,7 +17,11 @@ public class UserMapper {
         user.setPassword(request.getPassword());
         user.setPhoneNumber(request.getPhoneNumber());
 
-        user.setRole(Role.CUSTOMER);
+        user.setRole(
+                request.getRole() != null
+                        ? request.getRole()
+                        : Role.CUSTOMER
+        );
         user.setAccountStatus(AccountStatus.ACTIVE);
 
         return user;

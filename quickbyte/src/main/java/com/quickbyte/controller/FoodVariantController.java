@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/food-variants")
@@ -18,6 +18,7 @@ public class FoodVariantController {
     private final FoodVariantService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.CREATED)
     public FoodVariantResponse create(
             @Valid @RequestBody FoodVariantRequest request) {
@@ -26,6 +27,7 @@ public class FoodVariantController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public FoodVariantResponse update(
             @PathVariable Long id,
             @Valid @RequestBody FoodVariantRequest request) {
@@ -48,6 +50,7 @@ public class FoodVariantController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
             @PathVariable Long id) {

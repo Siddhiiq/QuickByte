@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface FoodAddonRepository
         extends JpaRepository<FoodAddon, Long> {
-
+    boolean existsByFoodIdAndNameIgnoreCase(
+            Long foodId,
+            String name
+    );
     List<FoodAddon> findByFoodIdOrderByDisplayOrder(Long foodId);
 
 }

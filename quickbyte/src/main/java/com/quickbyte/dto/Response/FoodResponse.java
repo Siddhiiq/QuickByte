@@ -1,4 +1,4 @@
-package com.quickbyte.dto;
+package com.quickbyte.dto.Response;
 
 import com.quickbyte.enums.FoodStatus;
 import com.quickbyte.enums.FoodType;
@@ -35,4 +35,6 @@ public class FoodResponse {
 
     private String categoryName;
 
+    // NEW
+    private Double price;
 }

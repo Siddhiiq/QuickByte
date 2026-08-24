@@ -1,0 +1,2 @@
+import { Link } from "react-router-dom";
+export default function OwnerDashboard(){return <main className="container"><h1>Restaurant Owner Dashboard</h1><div className="grid">{["Restaurant","Categories","Foods","Variants","Add-ons","Images","Timings"].map(x=><div className="card" key={x}><h2>{x}</h2><p>Connect this screen to the existing {x} API.</p><Link className="primary inline" to="/">Open</Link></div>)}</div></main>}

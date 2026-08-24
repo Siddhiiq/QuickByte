@@ -13,6 +13,8 @@ import com.quickbyte.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import com.quickbyte.security.SecurityUtils;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,16 @@ public class CategoryServiceImpl implements CategoryService {
                 restaurantRepository.findById(request.getRestaurantId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Restaurant not found"));
+        String currentEmail =
+                SecurityUtils.getCurrentUserEmail();
+
+        if (!restaurant.getOwner()
+                .getEmail()
+                .equals(currentEmail)) {
+
+            throw new AccessDeniedException(
+                    "You are not allowed to manage categories for this restaurant.");
+        }
 
         if (categoryRepository.existsByRestaurantIdAndNameIgnoreCase(
                 restaurant.getId(),
@@ -106,12 +118,24 @@ public class CategoryServiceImpl implements CategoryService {
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Category not found"));
 
+        String currentEmail =
+                SecurityUtils.getCurrentUserEmail();
+
+        if (!category.getRestaurant()
+                .getOwner()
+                .getEmail()
+                .equals(currentEmail)) {
+
+            throw new AccessDeniedException(
+                    "You are not allowed to modify this category.");
+        }
+
         if (!category.getName().equalsIgnoreCase(request.getName())
                 && categoryRepository.existsByRestaurantIdAndNameIgnoreCase(
                 category.getRestaurant().getId(),
                 request.getName())) {
 
-            throw new ResourceNotFoundException(
+            throw new ResourceAlreadyExistsException(
                     "Category name already exists");
         }
 
@@ -132,6 +156,18 @@ public class CategoryServiceImpl implements CategoryService {
                 categoryRepository.findById(categoryId)
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Category not found"));
+
+        String currentEmail =
+                SecurityUtils.getCurrentUserEmail();
+
+        if (!category.getRestaurant()
+                .getOwner()
+                .getEmail()
+                .equals(currentEmail)) {
+
+            throw new AccessDeniedException(
+                    "You are not allowed to delete this category.");
+        }
 
         categoryRepository.delete(category);
     }

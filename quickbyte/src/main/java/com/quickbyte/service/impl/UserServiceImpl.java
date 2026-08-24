@@ -15,12 +15,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.quickbyte.exception.ResourceNotFoundException;
 import com.quickbyte.service.EmailService;
+import com.quickbyte.entity.User.RefreshToken;
+import com.quickbyte.service.RefreshTokenService;
+import com.quickbyte.dto.Request.RefreshTokenRequest;
+import com.quickbyte.dto.Response.RefreshTokenResponse;
+import com.quickbyte.entity.User.RefreshToken;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -55,7 +61,7 @@ public class UserServiceImpl implements UserService {
         );
 
         Users savedUser = userRepository.save(user);
-        emailService.sendSimpleEmail(
+        /*emailService.sendSimpleEmail(
 
                 savedUser.getEmail(),
 
@@ -68,7 +74,7 @@ public class UserServiceImpl implements UserService {
                         + "Happy Ordering!\n\n"
                         + "Regards,\n"
                         + "QuickByte Team"
-        );
+        );*/
 
         return UserMapper.toResponse(savedUser);
 
@@ -89,18 +95,45 @@ public class UserServiceImpl implements UserService {
 
             throw new ResourceNotFoundException(
                     "Invalid Email or Password");
-
         }
 
-        String token = jwtService.generateToken(
-                user.getEmail(),
-                user.getRole().name());
+        String accessToken =
+                jwtService.generateToken(
+                        user.getEmail(),
+                        user.getRole().name()
+                );
+
+        RefreshToken refreshToken =
+                refreshTokenService.createRefreshToken(user);
 
         return LoginResponse.builder()
+
                 .message("Login Successful")
-                .token(token)
+
+                .accessToken(accessToken)
+
+                .refreshToken(refreshToken.getToken())
+
+                .tokenType("Bearer")
+
                 .role(user.getRole())
+
+                .userId(user.getId())
+
+                .email(user.getEmail())
+
                 .build();
+    }
+
+    @Override
+    public void logout(Long userId) {
+
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        refreshTokenService.deleteByUser(user);
 
     }
     @Override
@@ -111,6 +144,32 @@ public class UserServiceImpl implements UserService {
                         new ResourceNotFoundException("User not found"));
 
         return UserMapper.toResponse(user);
+    }
+    @Override
+    public RefreshTokenResponse refreshToken(
+            RefreshTokenRequest request) {
+
+        RefreshToken refreshToken =
+                refreshTokenService.verifyRefreshToken(
+                        request.getRefreshToken());
+
+        Users user = refreshToken.getUser();
+
+        String accessToken =
+                jwtService.generateAccessToken(
+                        user.getEmail(),
+                        user.getRole().name()
+                );
+
+        return RefreshTokenResponse.builder()
+
+                .accessToken(accessToken)
+
+                .refreshToken(refreshToken.getToken())
+
+                .tokenType("Bearer")
+
+                .build();
     }
 
 }

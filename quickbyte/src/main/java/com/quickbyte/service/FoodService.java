@@ -1,7 +1,7 @@
 package com.quickbyte.service;
 
-import com.quickbyte.dto.FoodRequest;
-import com.quickbyte.dto.FoodResponse;
+import com.quickbyte.dto.Request.FoodRequest;
+import com.quickbyte.dto.Response.FoodResponse;
 import org.springframework.data.domain.Page;
 
 public interface FoodService {
@@ -26,5 +26,4 @@ public interface FoodService {
             int size);
 
     void deleteFood(Long foodId);
-
 }

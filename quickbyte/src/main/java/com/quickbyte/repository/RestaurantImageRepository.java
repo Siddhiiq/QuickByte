@@ -9,10 +9,9 @@ import java.util.List;
 public interface RestaurantImageRepository
         extends JpaRepository<RestaurantImage, Long> {
 
-    List<RestaurantImage> findByRestaurant(Restaurant restaurant);
+    List<RestaurantImage> findByRestaurantOrderByDisplayOrderAsc(
+            Restaurant restaurant);
 
-    List<RestaurantImage> findByRestaurantOrderByDisplayOrder(
-            Restaurant restaurant
-    );
-
+    List<RestaurantImage> findByRestaurantIdOrderByDisplayOrderAsc(
+            Long restaurantId);
 }

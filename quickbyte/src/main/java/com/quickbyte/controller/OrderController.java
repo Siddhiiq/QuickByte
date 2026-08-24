@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class OrderController {
      * Place Order
      */
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse placeOrder(
             @Valid @RequestBody OrderRequest request) {
@@ -42,6 +44,7 @@ public class OrderController {
      * Get Customer Orders
      */
     @GetMapping("/customer/{customerId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public List<OrderResponse> getCustomerOrders(
             @PathVariable Long customerId) {
 
@@ -52,6 +55,7 @@ public class OrderController {
      * Get Restaurant Orders
      */
     @GetMapping("/restaurant/{restaurantId}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public List<OrderResponse> getRestaurantOrders(
             @PathVariable Long restaurantId) {
 
@@ -62,6 +66,7 @@ public class OrderController {
      * Update Order Status
      */
     @PutMapping("/{orderId}/status")
+    @PreAuthorize("hasAnyRole('RESTAURANT_OWNER','DELIVERY_PARTNER')")
     public OrderResponse updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam String status) {
@@ -76,6 +81,7 @@ public class OrderController {
      * Cancel Order
      */
     @DeleteMapping("/{orderId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelOrder(
             @PathVariable Long orderId) {

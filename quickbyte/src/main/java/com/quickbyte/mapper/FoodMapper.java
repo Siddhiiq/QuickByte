@@ -1,7 +1,7 @@
 package com.quickbyte.mapper;
 
-import com.quickbyte.dto.FoodRequest;
-import com.quickbyte.dto.FoodResponse;
+import com.quickbyte.dto.Request.FoodRequest;
+import com.quickbyte.dto.Response.FoodResponse;
 import com.quickbyte.entity.Category.Category;
 import com.quickbyte.entity.Food.Food;
 
@@ -21,6 +21,7 @@ public class FoodMapper {
                 .preparationTime(request.getPreparationTime())
                 .bestSeller(request.getBestSeller())
                 .recommended(request.getRecommended())
+                .price(request.getPrice())
                 .category(category)
                 .build();
     }
@@ -40,7 +41,7 @@ public class FoodMapper {
                 .status(food.getStatus())
                 .categoryId(food.getCategory().getId())
                 .categoryName(food.getCategory().getName())
+                .price(food.getPrice())
                 .build();
     }
-
 }

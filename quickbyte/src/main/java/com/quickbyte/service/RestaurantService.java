@@ -16,6 +16,8 @@ public interface RestaurantService {
 
     RestaurantResponse getRestaurantById(Long restaurantId);
 
+    RestaurantResponse getMyRestaurant();
+
     Page<RestaurantResponse> getAllRestaurants(
             int page,
             int size,

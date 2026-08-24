@@ -14,9 +14,6 @@ public class OrderRequest {
     @NotNull
     private Long customerId;
 
-    @NotNull
-    private Long restaurantId;
-
     @NotBlank
     private String street;
 
@@ -47,5 +44,4 @@ public class OrderRequest {
     private Double longitude;
 
     private String notes;
-
 }

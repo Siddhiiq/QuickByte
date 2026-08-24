@@ -11,6 +11,7 @@ import com.quickbyte.repository.FoodRepository;
 import com.quickbyte.service.FoodAddonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.quickbyte.exception.ResourceAlreadyExistsException;
 
 import java.util.List;
 
@@ -30,7 +31,16 @@ public class FoodAddonServiceImpl
         Food food =
                 foodRepository.findById(request.getFoodId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Food not found"));
+                                new ResourceNotFoundException(
+                                        "Food not found"));
+
+        if (addonRepository.existsByFoodIdAndNameIgnoreCase(
+                request.getFoodId(),
+                request.getName())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Addon already exists for this food");
+        }
 
         FoodAddon addon =
                 FoodAddonMapper.toEntity(request, food);
@@ -47,7 +57,21 @@ public class FoodAddonServiceImpl
         FoodAddon addon =
                 addonRepository.findById(addonId)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Addon not found"));
+                                new ResourceNotFoundException(
+                                        "Addon not found"));
+
+        boolean nameChanged =
+                !addon.getName()
+                        .equalsIgnoreCase(request.getName());
+
+        if (nameChanged &&
+                addonRepository.existsByFoodIdAndNameIgnoreCase(
+                        addon.getFood().getId(),
+                        request.getName())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Addon already exists for this food");
+        }
 
         addon.setName(request.getName());
         addon.setPrice(request.getPrice());

@@ -1,13 +1,14 @@
 package com.quickbyte.controller;
 
-import com.quickbyte.dto.FoodRequest;
-import com.quickbyte.dto.FoodResponse;
+import com.quickbyte.dto.Request.FoodRequest;
+import com.quickbyte.dto.Response.FoodResponse;
 import com.quickbyte.service.FoodService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/foods")
@@ -17,6 +18,7 @@ public class FoodController {
     private final FoodService foodService;
 
     @PostMapping
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.CREATED)
     public FoodResponse createFood(
             @Valid @RequestBody FoodRequest request) {
@@ -70,6 +72,7 @@ public class FoodController {
     }
 
     @PutMapping("/{foodId}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public FoodResponse updateFood(
             @PathVariable Long foodId,
             @Valid @RequestBody FoodRequest request) {
@@ -78,6 +81,7 @@ public class FoodController {
     }
 
     @DeleteMapping("/{foodId}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFood(
             @PathVariable Long foodId) {

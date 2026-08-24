@@ -12,6 +12,7 @@ import com.quickbyte.repository.*;
 import com.quickbyte.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.quickbyte.exception.ResourceAlreadyExistsException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse addReview(ReviewRequest request) {
 
+        if (reviewRepository.existsByCustomerIdAndFoodId(
+                request.getCustomerId(),
+                request.getFoodId())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Customer has already reviewed this food");
+        }
+
         Users customer = userRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
@@ -35,7 +44,15 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
 
         Food food = foodRepository.findById(request.getFoodId())
-                .orElseThrow(() -> new ResourceNotFoundException("Food not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Food not found"));
+
+        if (!food.getCategory().getRestaurant().getId()
+                .equals(restaurant.getId())) {
+
+            throw new IllegalArgumentException(
+                    "Food does not belong to this restaurant");
+        }
 
         Review review = Review.builder()
                 .customer(customer)
@@ -76,6 +93,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Review not found"));
+
+        reviewRepository.delete(review);
     }
 }

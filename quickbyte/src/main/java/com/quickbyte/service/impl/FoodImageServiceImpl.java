@@ -43,22 +43,30 @@ public class FoodImageServiceImpl
 
     @Override
     public List<FoodImageResponse> getImages(
-            Long foodId){
+            Long foodId) {
+
+        foodRepository.findById(foodId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Food not found"));
 
         return imageRepository
                 .findByFoodIdOrderByDisplayOrderAsc(foodId)
                 .stream()
                 .map(FoodImageMapper::toResponse)
                 .toList();
-
     }
 
     @Override
-    public void deleteImage(
-            Long imageId){
+    public void deleteImage(Long imageId) {
 
-        imageRepository.deleteById(imageId);
+        FoodImage image =
+                imageRepository.findById(imageId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Image not found"));
 
+        imageRepository.delete(image);
     }
 
 }

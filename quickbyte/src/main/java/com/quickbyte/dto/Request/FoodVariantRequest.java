@@ -18,10 +18,11 @@ public class FoodVariantRequest {
     @NotNull
     private VariantType variantType;
 
-    @NotNull
-    @Positive
-    @NotNull
-    @DecimalMin(value = "0.00")
+    @NotNull(message = "Price is required")
+    @DecimalMin(
+            value = "0.01",
+            message = "Price must be greater than 0"
+    )
     private BigDecimal price;
 
     @NotNull

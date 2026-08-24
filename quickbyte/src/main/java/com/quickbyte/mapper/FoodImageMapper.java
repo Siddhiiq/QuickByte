@@ -16,7 +16,6 @@ public class FoodImageMapper {
         return FoodImage.builder()
                 .food(food)
                 .imageUrl(request.getImageUrl())
-                .imageUrl(request.getImageUrl())
                 .thumbnail(request.getThumbnail())
                 .displayOrder(request.getDisplayOrder())
                 .build();

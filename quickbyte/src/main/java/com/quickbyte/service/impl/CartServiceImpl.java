@@ -201,4 +201,49 @@ public class CartServiceImpl implements CartService {
         return CartMapper.toResponse(cart);
     }
 
+    @Override
+    public CartResponse updateItemQuantity(
+            Long userId,
+            Long cartItemId,
+            Integer quantity) {
+
+        if (quantity == null || quantity < 1) {
+            throw new IllegalArgumentException(
+                    "Quantity must be at least 1");
+        }
+
+        Cart cart = cartRepository
+                .findByUserId(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Cart not found"));
+
+        CartItem cartItem = cartItemRepository
+                .findById(cartItemId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Cart item not found"));
+
+        if (!cartItem.getCart().getId().equals(cart.getId())) {
+            throw new ResourceNotFoundException(
+                    "Cart item does not belong to this user");
+        }
+
+        cartItem.setQuantity(quantity);
+
+        cartItem.setTotalPrice(
+                cartItem.getUnitPrice().multiply(
+                        BigDecimal.valueOf(quantity)
+                )
+        );
+
+        cartItemRepository.save(cartItem);
+
+        recalculateCart(cart);
+
+        cartRepository.save(cart);
+
+        return CartMapper.toResponse(cart);
+    }
+
 }

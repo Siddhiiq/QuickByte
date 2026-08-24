@@ -13,19 +13,30 @@ import lombok.*;
 @Builder
 public class RestaurantImage extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    private Restaurant restaurant;
-
     @Column(nullable = false, length = 500)
     private String imageUrl;
 
     @Column(nullable = false)
     @Builder.Default
-    private Integer displayOrder = 1;
+    private Boolean thumbnail = false;
 
     @Column(nullable = false)
     @Builder.Default
-    private Boolean primaryImage = false;
+    private Integer displayOrder = 1;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @PrePersist
+    public void prePersist() {
+
+        if (thumbnail == null) {
+            thumbnail = false;
+        }
+
+        if (displayOrder == null) {
+            displayOrder = 1;
+        }
+    }
 }

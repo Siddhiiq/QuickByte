@@ -20,6 +20,9 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
+
+    private static final long ACCESS_TOKEN_EXPIRATION =
+            1000 * 60 * 15;
     /**
      * Generate Secret Key
      */
@@ -34,9 +37,7 @@ public class JwtService {
     /**
      * Generate JWT Token
      */
-    public String generateToken(
-            String email,
-            String role) {
+    public String generateToken(String email, String role) {
 
         return Jwts.builder()
 
@@ -49,18 +50,14 @@ public class JwtService {
                 .expiration(
                         new Date(
                                 System.currentTimeMillis()
-                                        + expiration
+                                        + ACCESS_TOKEN_EXPIRATION
                         )
                 )
 
                 .signWith(getSigningKey())
 
                 .compact();
-
     }
-    /**
-     * Extract Username
-     */
     public String extractUsername(String token) {
 
         return extractClaim(
@@ -94,7 +91,27 @@ public class JwtService {
         return claimsResolver.apply(claims);
 
     }
+    public String generateAccessToken(String email, String role) {
 
+        return Jwts.builder()
+
+                .subject(email)
+
+                .claim("role", role)
+
+                .issuedAt(new Date())
+
+                .expiration(
+                        new Date(
+                                System.currentTimeMillis()
+                                        + ACCESS_TOKEN_EXPIRATION
+                        )
+                )
+
+                .signWith(getSigningKey())
+
+                .compact();
+    }
     /**
      * Parse All Claims
      */

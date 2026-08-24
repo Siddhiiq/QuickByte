@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class FoodAddonController {
     private final FoodAddonService foodAddonService;
 
     @PostMapping
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.CREATED)
     public FoodAddonResponse createAddon(
             @Valid
@@ -42,6 +44,7 @@ public class FoodAddonController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public FoodAddonResponse updateAddon(
             @PathVariable Long id,
             @Valid
@@ -52,6 +55,7 @@ public class FoodAddonController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddon(
             @PathVariable Long id) {

@@ -8,6 +8,10 @@ import com.quickbyte.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import com.quickbyte.dto.Request.RefreshTokenRequest;
+import com.quickbyte.dto.Response.RefreshTokenResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,11 +21,31 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse registerUser(
+
             @Valid
             @RequestBody UserRegistrationRequest request) {
 
         return userService.registerUser(request);
+    }
+    @PostMapping("/refresh-token")
+    public RefreshTokenResponse refreshToken(
+
+            @Valid
+            @RequestBody
+            RefreshTokenRequest request) {
+
+        return userService.refreshToken(request);
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(
+
+            @RequestParam Long userId) {
+
+        userService.logout(userId);
 
     }
 

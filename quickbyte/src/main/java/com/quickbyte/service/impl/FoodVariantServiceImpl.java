@@ -59,13 +59,26 @@ public class FoodVariantServiceImpl
                                 new ResourceNotFoundException(
                                         "Variant not found"));
 
+        boolean variantTypeChanged =
+                variant.getVariantType()
+                        != request.getVariantType();
+
+        if (variantTypeChanged &&
+                variantRepository.existsByFoodIdAndVariantType(
+                        variant.getFood().getId(),
+                        request.getVariantType())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Variant already exists for this food");
+        }
+
         variant.setVariantType(request.getVariantType());
         variant.setPrice(request.getPrice());
         variant.setStock(request.getStock());
+        variant.setAvailable(request.getStock() > 0);
 
         return FoodVariantMapper.toResponse(
                 variantRepository.save(variant));
-
     }
 
     @Override
@@ -95,8 +108,13 @@ public class FoodVariantServiceImpl
     public void deleteVariant(
             Long variantId) {
 
-        variantRepository.deleteById(variantId);
+        FoodVariant variant =
+                variantRepository.findById(variantId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Variant not found"));
 
+        variantRepository.delete(variant);
     }
 
 }

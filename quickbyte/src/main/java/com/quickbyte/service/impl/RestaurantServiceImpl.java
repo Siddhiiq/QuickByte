@@ -12,9 +12,16 @@ import com.quickbyte.repository.RestaurantRepository;
 import com.quickbyte.repository.UserRepository;
 import com.quickbyte.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import com.quickbyte.security.SecurityUtils;
+import org.springframework.security.access.AccessDeniedException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
@@ -24,6 +31,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final UserRepository userRepository;
 
     @Override
+    @CacheEvict(value = "restaurants", allEntries = true)
     public RestaurantResponse createRestaurant(
             RestaurantRequest request) {
 
@@ -40,7 +48,9 @@ public class RestaurantServiceImpl implements RestaurantService {
                     "Restaurant phone already exists");
         }
 
-        Users owner = userRepository.findById(request.getOwnerId())
+        String email = SecurityUtils.getCurrentUserEmail();
+
+        Users owner = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Owner not found"));
@@ -52,11 +62,30 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Restaurant savedRestaurant =
                 restaurantRepository.save(restaurant);
+        log.info(
+                "Restaurant created successfully. ID={}, Name={}",
+                savedRestaurant.getId(),
+                savedRestaurant.getName());
 
         return RestaurantMapper.toResponse(savedRestaurant);
     }
 
     @Override
+    public RestaurantResponse getMyRestaurant() {
+
+        String email =
+                SecurityUtils.getCurrentUserEmail();
+
+        Restaurant restaurant =
+                restaurantRepository.findByOwner_Email(email)                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Restaurant not found for current owner"));
+
+        return RestaurantMapper.toResponse(restaurant);
+    }
+
+    @Override
+    @CachePut(value = "restaurants", key = "#restaurantId")
     public RestaurantResponse updateRestaurant(
             Long restaurantId,
             RestaurantRequest request) {
@@ -66,6 +95,32 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Restaurant not found"));
+
+        String currentEmail =
+                SecurityUtils.getCurrentUserEmail();
+
+        if (!restaurant.getOwner()
+                .getEmail()
+                .equals(currentEmail)) {
+
+            throw new AccessDeniedException(
+                    "You are not allowed to modify this restaurant.");
+        }
+
+        if (!restaurant.getEmail().equalsIgnoreCase(request.getEmail())
+                && restaurantRepository.existsByEmail(request.getEmail())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Restaurant email already exists");
+        }
+
+// Check phone uniqueness
+        if (!restaurant.getPhoneNumber().equals(request.getPhoneNumber())
+                && restaurantRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+
+            throw new ResourceAlreadyExistsException(
+                    "Restaurant phone already exists");
+        }
 
         restaurant.setName(request.getName());
         restaurant.setDescription(request.getDescription());
@@ -88,11 +143,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant updated =
                 restaurantRepository.save(restaurant);
 
-        return RestaurantMapper.toResponse(updated);
+        log.info(
+                "Restaurant updated successfully. ID={}",
+                updated.getId());
 
+        return RestaurantMapper.toResponse(updated);
     }
 
     @Override
+    @Cacheable(value = "restaurants", key = "#restaurantId")
     public RestaurantResponse getRestaurantById(
             Long restaurantId) {
 
@@ -101,6 +160,10 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Restaurant not found"));
+
+        log.info(
+                "Restaurant fetched. ID={}",
+                restaurant.getId());
 
         return RestaurantMapper.toResponse(restaurant);
 
@@ -132,6 +195,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         Pageable pageable =
                 PageRequest.of(page, size);
 
+        log.info(
+                "Restaurant search performed. Keyword={}",
+                keyword);
+
         return restaurantRepository
                 .findByNameContainingIgnoreCase(
                         keyword,
@@ -141,8 +208,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteRestaurant(
-            Long restaurantId) {
+    @CacheEvict(value = "restaurants", key = "#restaurantId")
+    public void deleteRestaurant(Long restaurantId) {
 
         Restaurant restaurant =
                 restaurantRepository.findById(restaurantId)
@@ -150,8 +217,22 @@ public class RestaurantServiceImpl implements RestaurantService {
                                 new ResourceNotFoundException(
                                         "Restaurant not found"));
 
-        restaurantRepository.delete(restaurant);
+        String currentEmail =
+                SecurityUtils.getCurrentUserEmail();
 
+        if (!restaurant.getOwner()
+                .getEmail()
+                .equals(currentEmail)) {
+
+            throw new AccessDeniedException(
+                    "You are not allowed to delete this restaurant.");
+        }
+        log.warn(
+                "Restaurant deleted. ID={}",
+                restaurant.getId());
+
+
+        restaurantRepository.delete(restaurant);
     }
 
 }
