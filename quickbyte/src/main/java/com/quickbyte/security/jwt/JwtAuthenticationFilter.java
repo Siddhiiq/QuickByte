@@ -59,7 +59,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                  * Public restaurant/menu GET APIs
                  */
                 || (method.equals("GET")
-                && requestPath.startsWith("/api/v1/restaurants"))
+                && (
+                requestPath.equals("/api/v1/restaurants")
+                        || requestPath.matches("/api/v1/restaurants/\\d+")
+        ))
 
                 || (method.equals("GET")
                 && requestPath.startsWith("/api/v1/categories"))

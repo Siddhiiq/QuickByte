@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import CategoryPage from "./pages/CategoryPage";
 import FoodDetails from "./pages/FoodDetails";
 import OnlinePayment from "./pages/OnlinePayment";
+import RestaurantManagement from "./pages/RestaurantManagement";
+import CategoryManagement from "./pages/CategoryManagement";
 
 export default function App() {
   return (
@@ -129,6 +131,24 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+          <Route
+              path="/owner/categories"
+              element={
+                  <ProtectedRoute roles={["RESTAURANT_OWNER"]}>
+                      <CategoryManagement />
+                  </ProtectedRoute>
+              }
+          />
+
+          <Route
+              path="/owner/restaurant"
+              element={
+                  <ProtectedRoute roles={["RESTAURANT_OWNER"]}>
+                      <RestaurantManagement />
+                  </ProtectedRoute>
+              }
+          />
 
 
         {/* =========================
