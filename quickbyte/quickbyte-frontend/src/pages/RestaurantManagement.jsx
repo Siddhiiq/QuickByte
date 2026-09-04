@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+
 import {
-    getMyRestaurant,
+    getMyRestaurants,
     createRestaurant,
     updateRestaurant,
 } from "../api/restaurantApi";
+
 
 const initialForm = {
     name: "",
@@ -22,180 +24,591 @@ const initialForm = {
     longitude: "",
 };
 
+
 export default function RestaurantManagement() {
-    const [restaurant, setRestaurant] = useState(null);
-    const [form, setForm] = useState(initialForm);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [message, setMessage] = useState("");
-    const [error, setError] = useState("");
+
+    const [restaurants, setRestaurants] =
+        useState([]);
+
+    const [selectedRestaurant, setSelectedRestaurant] =
+        useState(null);
+
+    const [form, setForm] =
+        useState(initialForm);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [saving, setSaving] =
+        useState(false);
+
+    const [editing, setEditing] =
+        useState(false);
+
+    const [creating, setCreating] =
+        useState(false);
+
+    const [message, setMessage] =
+        useState("");
+
+    const [error, setError] =
+        useState("");
+
 
     useEffect(() => {
-        loadMyRestaurant();
+
+        loadMyRestaurants();
+
     }, []);
 
-    const loadMyRestaurant = async () => {
+
+    const loadMyRestaurants = async () => {
+
         try {
+
             setLoading(true);
-
-            const response = await getMyRestaurant();
-
-            setRestaurant(response.data);
-
-            setForm({
-                name: response.data.name || "",
-                description: response.data.description || "",
-                email: response.data.email || "",
-                phoneNumber: response.data.phoneNumber || "",
-                street: response.data.street || "",
-                area: response.data.area || "",
-                landmark: response.data.landmark || "",
-                city: response.data.city || "",
-                district: response.data.district || "",
-                state: response.data.state || "",
-                country: response.data.country || "",
-                pincode: response.data.pincode || "",
-                latitude: response.data.latitude || "",
-                longitude: response.data.longitude || "",
-            });
-        } catch (err) {
-            if (err.response?.status !== 404) {
-                setError(
-                    err.response?.data?.message ||
-                    "Failed to load restaurant."
-                );
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setForm((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            setSaving(true);
             setError("");
-            setMessage("");
 
-            const payload = {
-                ...form,
-                latitude: Number(form.latitude),
-                longitude: Number(form.longitude),
-            };
+            const response =
+                await getMyRestaurants();
 
-            let response;
 
-            if (restaurant) {
-                response = await updateRestaurant(
-                    restaurant.id,
-                    payload
-                );
+            const restaurantList =
+                Array.isArray(response.data)
+                    ? response.data
+                    : response.data?.content || [];
 
-                setMessage("Restaurant updated successfully.");
-            } else {
-                response = await createRestaurant(payload);
 
-                setMessage("Restaurant created successfully.");
-            }
+            setRestaurants(
+                restaurantList
+            );
 
-            setRestaurant(response.data);
-            setEditing(false);
         } catch (err) {
+
+            console.error(err);
+
             setError(
                 err.response?.data?.message ||
-                "Something went wrong. Please try again."
+                "Failed to load restaurants."
             );
+
         } finally {
-            setSaving(false);
+
+            setLoading(false);
+
         }
+
     };
 
+
+    const handleChange = (e) => {
+
+        const {
+            name,
+            value,
+        } = e.target;
+
+
+        setForm((previous) => ({
+
+            ...previous,
+
+            [name]: value,
+
+        }));
+
+    };
+
+
+    const handleEdit =
+        (restaurant) => {
+
+            setSelectedRestaurant(
+                restaurant
+            );
+
+            setForm({
+
+                name:
+                    restaurant.name || "",
+
+                description:
+                    restaurant.description || "",
+
+                email:
+                    restaurant.email || "",
+
+                phoneNumber:
+                    restaurant.phoneNumber || "",
+
+                street:
+                    restaurant.street || "",
+
+                area:
+                    restaurant.area || "",
+
+                landmark:
+                    restaurant.landmark || "",
+
+                city:
+                    restaurant.city || "",
+
+                district:
+                    restaurant.district || "",
+
+                state:
+                    restaurant.state || "",
+
+                country:
+                    restaurant.country || "",
+
+                pincode:
+                    restaurant.pincode || "",
+
+                latitude:
+                    restaurant.latitude ?? "",
+
+                longitude:
+                    restaurant.longitude ?? "",
+
+            });
+
+            setEditing(true);
+
+            setCreating(false);
+
+            setMessage("");
+
+            setError("");
+
+        };
+
+
+    const handleCreate = () => {
+
+        setSelectedRestaurant(
+            null
+        );
+
+        setForm(
+            initialForm
+        );
+
+        setCreating(true);
+
+        setEditing(false);
+
+        setMessage("");
+
+        setError("");
+
+    };
+
+
+    const handleSubmit =
+        async (e) => {
+
+            e.preventDefault();
+
+            try {
+
+                setSaving(true);
+
+                setError("");
+
+                setMessage("");
+
+
+                const payload = {
+
+                    name:
+                    form.name,
+
+                    description:
+                    form.description,
+
+                    email:
+                    form.email,
+
+                    phoneNumber:
+                    form.phoneNumber,
+
+                    street:
+                    form.street,
+
+                    area:
+                    form.area,
+
+                    landmark:
+                    form.landmark,
+
+                    city:
+                    form.city,
+
+                    district:
+                    form.district,
+
+                    state:
+                    form.state,
+
+                    country:
+                    form.country,
+
+                    pincode:
+                    form.pincode,
+
+                    latitude:
+                        Number(
+                            form.latitude
+                        ),
+
+                    longitude:
+                        Number(
+                            form.longitude
+                        ),
+
+                };
+
+
+                if (
+                    selectedRestaurant
+                ) {
+
+                    await updateRestaurant(
+
+                        selectedRestaurant.id,
+
+                        payload
+
+                    );
+
+
+                    setMessage(
+                        "Restaurant updated successfully."
+                    );
+
+                } else {
+
+                    await createRestaurant(
+                        payload
+                    );
+
+
+                    setMessage(
+                        "Restaurant created successfully."
+                    );
+
+                }
+
+
+                await loadMyRestaurants();
+
+
+                setSelectedRestaurant(
+                    null
+                );
+
+                setEditing(false);
+
+                setCreating(false);
+
+                setForm(
+                    initialForm
+                );
+
+            } catch (err) {
+
+                console.error(err);
+
+                setError(
+                    err.response?.data?.message ||
+                    "Something went wrong. Please try again."
+                );
+
+            } finally {
+
+                setSaving(false);
+
+            }
+
+        };
+
+
+    const handleCancel = () => {
+
+        setSelectedRestaurant(
+            null
+        );
+
+        setForm(
+            initialForm
+        );
+
+        setEditing(false);
+
+        setCreating(false);
+
+        setError("");
+
+    };
+
+
     if (loading) {
+
         return (
+
             <main className="container">
-                <p>Loading restaurant...</p>
+
+                <p>
+                    Loading restaurants...
+                </p>
+
             </main>
+
         );
+
     }
 
-    if (restaurant && !editing) {
+
+    /*
+     * RESTAURANT LIST
+     */
+
+    if (
+        !editing &&
+        !creating
+    ) {
+
         return (
+
             <main className="container">
-                <h1>My Restaurant</h1>
 
-                {message && <p>{message}</p>}
+                <h1>
+                    My Restaurants
+                </h1>
 
-                <div className="card">
-                    <h2>{restaurant.name}</h2>
 
-                    <p>{restaurant.description}</p>
-
-                    <p>
-                        <strong>Email:</strong> {restaurant.email}
-                    </p>
+                {message && (
 
                     <p>
-                        <strong>Phone:</strong>{" "}
-                        {restaurant.phoneNumber}
+                        {message}
                     </p>
+
+                )}
+
+
+                {error && (
 
                     <p>
-                        <strong>Address:</strong>{" "}
-                        {restaurant.street}, {restaurant.area},
-                        {" "}
-                        {restaurant.city}, {restaurant.district},
-                        {" "}
-                        {restaurant.state}, {restaurant.country}
-                        {" - "}
-                        {restaurant.pincode}
+                        {error}
                     </p>
 
-                    {restaurant.landmark && (
-                        <p>
-                            <strong>Landmark:</strong>{" "}
-                            {restaurant.landmark}
-                        </p>
-                    )}
+                )}
 
-                    <button
-                        className="primary"
-                        onClick={() => {
-                            setEditing(true);
-                            setMessage("");
-                        }}
-                    >
-                        Edit Restaurant
-                    </button>
-                </div>
+
+                <button
+                    className="primary"
+                    onClick={
+                        handleCreate
+                    }
+                >
+
+                    Create New Restaurant
+
+                </button>
+
+
+                <br />
+
+                <br />
+
+
+                {restaurants.length === 0 ? (
+
+                    <p>
+                        You have not created any restaurants yet.
+                    </p>
+
+                ) : (
+
+                    <div className="grid">
+
+                        {restaurants.map(
+                            (restaurant) => (
+
+                                <div
+                                    className="card"
+                                    key={
+                                        restaurant.id
+                                    }
+                                >
+
+                                    <h2>
+                                        {restaurant.name}
+                                    </h2>
+
+
+                                    {restaurant.description && (
+
+                                        <p>
+                                            {
+                                                restaurant.description
+                                            }
+                                        </p>
+
+                                    )}
+
+
+                                    <p>
+
+                                        <strong>
+                                            Email:
+                                        </strong>
+
+                                        {" "}
+
+                                        {
+                                            restaurant.email ||
+                                            "-"
+                                        }
+
+                                    </p>
+
+
+                                    <p>
+
+                                        <strong>
+                                            Phone:
+                                        </strong>
+
+                                        {" "}
+
+                                        {
+                                            restaurant.phoneNumber ||
+                                            "-"
+                                        }
+
+                                    </p>
+
+
+                                    <p>
+
+                                        <strong>
+                                            Address:
+                                        </strong>
+
+                                        {" "}
+
+                                        {[
+                                            restaurant.street,
+                                            restaurant.area,
+                                            restaurant.city,
+                                            restaurant.district,
+                                            restaurant.state,
+                                            restaurant.country,
+                                            restaurant.pincode,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(", ") || "-"}
+
+                                    </p>
+
+
+                                    {restaurant.landmark && (
+
+                                        <p>
+
+                                            <strong>
+                                                Landmark:
+                                            </strong>
+
+                                            {" "}
+
+                                            {
+                                                restaurant.landmark
+                                            }
+
+                                        </p>
+
+                                    )}
+
+
+                                    <p>
+
+                                        <strong>
+                                            Status:
+                                        </strong>
+
+                                        {" "}
+
+                                        {
+                                            restaurant.status ||
+                                            "-"
+                                        }
+
+                                    </p>
+
+
+                                    <button
+                                        className="primary"
+                                        onClick={() =>
+                                            handleEdit(
+                                                restaurant
+                                            )
+                                        }
+                                    >
+
+                                        Edit Restaurant
+
+                                    </button>
+
+                                </div>
+
+                            )
+                        )}
+
+                    </div>
+
+                )}
+
             </main>
+
         );
+
     }
+
+
+    /*
+     * CREATE / EDIT FORM
+     */
 
     return (
+
         <main className="container">
+
             <h1>
-                {restaurant
+
+                {selectedRestaurant
                     ? "Edit Restaurant"
                     : "Create Restaurant"}
+
             </h1>
 
-            {error && <p>{error}</p>}
+
+            {error && (
+
+                <p>
+                    {error}
+                </p>
+
+            )}
+
 
             <form
                 className="card"
                 onSubmit={handleSubmit}
             >
+
                 <input
                     name="name"
                     placeholder="Restaurant Name"
@@ -204,6 +617,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <textarea
                     name="description"
                     placeholder="Description"
@@ -211,6 +625,7 @@ export default function RestaurantManagement() {
                     onChange={handleChange}
                     required
                 />
+
 
                 <input
                     type="email"
@@ -221,6 +636,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="phoneNumber"
                     placeholder="Phone Number"
@@ -228,6 +644,7 @@ export default function RestaurantManagement() {
                     onChange={handleChange}
                     required
                 />
+
 
                 <input
                     name="street"
@@ -237,6 +654,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="area"
                     placeholder="Area"
@@ -245,12 +663,14 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="landmark"
                     placeholder="Landmark (Optional)"
                     value={form.landmark}
                     onChange={handleChange}
                 />
+
 
                 <input
                     name="city"
@@ -260,6 +680,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="district"
                     placeholder="District"
@@ -267,6 +688,7 @@ export default function RestaurantManagement() {
                     onChange={handleChange}
                     required
                 />
+
 
                 <input
                     name="state"
@@ -276,6 +698,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="country"
                     placeholder="Country"
@@ -284,6 +707,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     name="pincode"
                     placeholder="Pincode"
@@ -291,6 +715,7 @@ export default function RestaurantManagement() {
                     onChange={handleChange}
                     required
                 />
+
 
                 <input
                     type="number"
@@ -302,6 +727,7 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <input
                     type="number"
                     step="any"
@@ -312,27 +738,36 @@ export default function RestaurantManagement() {
                     required
                 />
 
+
                 <button
                     className="primary"
                     type="submit"
                     disabled={saving}
                 >
+
                     {saving
                         ? "Saving..."
-                        : restaurant
+                        : selectedRestaurant
                             ? "Update Restaurant"
                             : "Create Restaurant"}
+
                 </button>
 
-                {restaurant && (
-                    <button
-                        type="button"
-                        onClick={() => setEditing(false)}
-                    >
-                        Cancel
-                    </button>
-                )}
+
+                <button
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={saving}
+                >
+
+                    Cancel
+
+                </button>
+
             </form>
+
         </main>
+
     );
+
 }

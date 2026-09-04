@@ -7,6 +7,12 @@ export default function OrderDetails() {
 
   const { id } = useParams();
 
+  console.log(
+      "ORDER DETAILS PAGE LOADED, ID:",
+      id
+  );
+
+
   const [order, setOrder] = useState(null);
   const [error, setError] = useState("");
   const [cancelling, setCancelling] = useState(false);
@@ -48,11 +54,26 @@ export default function OrderDetails() {
 
   useEffect(() => {
 
+    console.log(
+        "FETCHING ORDER:",
+        id
+    );
+
     getOrder(id)
       .then((response) => {
+
+        console.log(
+            "ORDER RESPONSE:",
+            response.data
+        );
         setOrder(response.data);
       })
       .catch((e) => {
+
+        console.error(
+            "ORDER API ERROR:",
+            e.response?.data || e
+        );
 
         setError(
           e.response?.data?.message ||

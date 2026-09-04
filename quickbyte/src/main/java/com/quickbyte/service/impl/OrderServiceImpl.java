@@ -196,6 +196,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderResponse> getAllOrders() {
+
+        return orderRepository
+                .findAll()
+                .stream()
+                .map(OrderMapper::toResponse)
+                .toList();
+    }
+
+    @Override
     public List<OrderResponse> getRestaurantOrders(
             Long restaurantId) {
 

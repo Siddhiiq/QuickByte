@@ -31,6 +31,17 @@ public class OrderController {
     }
 
     /**
+     * Get All Orders
+     *
+     * ADMIN only
+     */
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderResponse> getAllOrders() {
+
+        return orderService.getAllOrders();
+    }
+    /**
      * Get Order By Id
      */
     @GetMapping("/{orderId}")

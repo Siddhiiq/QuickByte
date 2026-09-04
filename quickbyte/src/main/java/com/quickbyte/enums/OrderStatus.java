@@ -8,7 +8,7 @@ public enum OrderStatus {
 
     PREPARING,
 
-    READY,
+    READY_FOR_PICKUP,
 
     OUT_FOR_DELIVERY,
 

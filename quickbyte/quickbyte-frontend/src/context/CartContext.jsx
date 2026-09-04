@@ -198,12 +198,6 @@ export function CartProvider({
         );
       }
 
-      if (!item?.variantId) {
-
-        throw new Error(
-          "Food variant is required."
-        );
-      }
 
       const payload = {
 

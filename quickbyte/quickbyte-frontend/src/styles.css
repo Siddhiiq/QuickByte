@@ -4783,3 +4783,2065 @@ textarea {
   }
 
 }
+/* =========================================================
+   QUICKBYTE UI ENHANCEMENTS
+   ADD THIS AT THE BOTTOM OF style.css
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+#restaurants,
+#home-search {
+  scroll-margin-top: 100px;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.navbar-inner {
+  width: min(100% - 40px, 1320px);
+  margin: 0 auto;
+
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 800;
+
+  color: inherit;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #ff5a1f;
+  color: white;
+
+  font-weight: 800;
+  font-size: 20px;
+
+  box-shadow: 0 8px 20px rgba(255, 90, 31, 0.25);
+}
+
+.brand-name span {
+  color: #ff5a1f;
+}
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border: none;
+  background: transparent;
+
+  padding: 10px 13px;
+
+  border-radius: 9px;
+
+  text-decoration: none;
+
+  color: inherit;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.2s ease;
+}
+
+.nav-item:hover {
+  background: rgba(255, 90, 31, 0.08);
+  color: #ff5a1f;
+}
+
+.nav-item.active {
+  background: rgba(255, 90, 31, 0.1);
+  color: #ff5a1f;
+}
+
+.nav-scroll-button {
+  font-family: inherit;
+}
+
+.nav-register {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 17px;
+
+  margin-left: 6px;
+
+  border-radius: 10px;
+
+  background: #ff5a1f;
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+}
+
+.nav-register:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 90, 31, 0.25);
+}
+
+.cart-link {
+  position: relative;
+}
+
+.cart-count {
+  min-width: 19px;
+  height: 19px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50px;
+
+  background: #ff5a1f;
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.logout-button {
+  color: #dc2626;
+}
+
+.logout-button:hover {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   OWNER DASHBOARD
+========================================================= */
+
+.owner-dashboard-page {
+  min-height: calc(100vh - 76px);
+
+  padding: 45px 20px 70px;
+
+  background:
+          linear-gradient(
+                  180deg,
+                  rgba(255, 90, 31, 0.035),
+                  transparent 280px
+          );
+}
+
+.owner-dashboard-container {
+  width: min(100%, 1250px);
+  margin: 0 auto;
+}
+
+
+/* OWNER HERO */
+
+.owner-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 42px;
+
+  border-radius: 24px;
+
+  background:
+          linear-gradient(
+                  135deg,
+                  #171717,
+                  #292929
+          );
+
+  color: white;
+
+  overflow: hidden;
+
+  position: relative;
+
+  box-shadow:
+          0 20px 60px
+          rgba(0, 0, 0, 0.12);
+}
+
+.owner-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 260px;
+  height: 260px;
+
+  border-radius: 50%;
+
+  background:
+          rgba(255, 90, 31, 0.18);
+
+  right: -80px;
+  top: -100px;
+}
+
+.owner-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.owner-dashboard-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 12px;
+
+  border-radius: 50px;
+
+  background:
+          rgba(255, 255, 255, 0.1);
+
+  color: #ff8b63;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.owner-hero h1 {
+  margin: 18px 0 10px;
+
+  font-size: clamp(30px, 4vw, 46px);
+
+  line-height: 1.1;
+}
+
+.owner-hero h1 span {
+  color: #ff8b63;
+}
+
+.owner-hero p {
+  max-width: 620px;
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+.owner-hero-icon {
+  width: 90px;
+  height: 90px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  background:
+          rgba(255, 255, 255, 0.1);
+
+  color: #ff8b63;
+
+  position: relative;
+  z-index: 1;
+}
+
+
+/* OWNER OVERVIEW */
+
+.owner-overview {
+  display: grid;
+
+  grid-template-columns:
+        repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-top: 25px;
+}
+
+.owner-overview-card {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  border: 1px solid
+  rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+          0 8px 30px
+          rgba(0, 0, 0, 0.04);
+}
+
+.owner-overview-icon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+          rgba(255, 90, 31, 0.1);
+
+  color: #ff5a1f;
+}
+
+.owner-overview-card div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.owner-overview-card span {
+  font-size: 13px;
+  color: #777;
+}
+
+.owner-overview-card strong {
+  font-size: 15px;
+}
+
+
+/* OWNER MANAGEMENT */
+
+.owner-management-section {
+  margin-top: 60px;
+}
+
+.owner-section-heading {
+  margin-bottom: 28px;
+}
+
+.owner-section-heading > div > span {
+  display: inline-block;
+
+  margin-bottom: 8px;
+
+  color: #ff5a1f;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.owner-section-heading h2 {
+  margin: 0;
+
+  font-size: 30px;
+}
+
+.owner-section-heading p {
+  margin: 9px 0 0;
+
+  color: #777;
+}
+
+.owner-dashboard-grid {
+  display: grid;
+
+  grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+  gap: 20px;
+}
+
+.owner-dashboard-card {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 250px;
+
+  padding: 23px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  border: 1px solid
+  rgba(0, 0, 0, 0.07);
+
+  text-decoration: none;
+  color: inherit;
+
+  box-shadow:
+          0 8px 25px
+          rgba(0, 0, 0, 0.035);
+
+  transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s ease;
+}
+
+.owner-dashboard-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+          rgba(255, 90, 31, 0.35);
+
+  box-shadow:
+          0 18px 40px
+          rgba(0, 0, 0, 0.08);
+}
+
+.owner-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.owner-card-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+          rgba(255, 90, 31, 0.1);
+
+  color: #ff5a1f;
+}
+
+.owner-card-arrow {
+  color: #999;
+}
+
+.owner-card-content {
+  margin-top: 25px;
+}
+
+.owner-card-content h3 {
+  margin: 0;
+
+  font-size: 19px;
+}
+
+.owner-card-content p {
+  margin: 10px 0 0;
+
+  color: #777;
+
+  font-size: 14px;
+
+  line-height: 1.65;
+}
+
+.owner-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+  padding-top: 22px;
+
+  color: #ff5a1f;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-page {
+  min-height: calc(100vh - 76px);
+
+  padding: 50px 20px 80px;
+
+  background:
+          linear-gradient(
+                  180deg,
+                  rgba(255, 90, 31, 0.035),
+                  transparent 300px
+          );
+}
+
+.profile-container {
+  width: min(100%, 950px);
+  margin: 0 auto;
+}
+
+
+/* PROFILE HERO */
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+
+  padding: 36px;
+
+  border-radius: 24px;
+
+  background:
+          linear-gradient(
+                  135deg,
+                  #171717,
+                  #2d2d2d
+          );
+
+  color: white;
+
+  box-shadow:
+          0 20px 50px
+          rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar {
+  width: 82px;
+  height: 82px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+          linear-gradient(
+                  135deg,
+                  #ff5a1f,
+                  #ff7a45
+          );
+
+  color: white;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  box-shadow:
+          0 10px 30px
+          rgba(255, 90, 31, 0.25);
+}
+
+.profile-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #ff8b63;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.profile-hero h1 {
+  margin: 9px 0;
+
+  font-size: 32px;
+}
+
+.profile-hero p {
+  margin: 0;
+
+  color:
+          rgba(255, 255, 255, 0.65);
+}
+
+
+/* PROFILE DETAILS */
+
+.profile-details-card {
+  margin-top: 25px;
+
+  padding: 34px;
+
+  border-radius: 24px;
+
+  background: white;
+
+  border: 1px solid
+  rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+          0 12px 40px
+          rgba(0, 0, 0, 0.04);
+}
+
+.profile-section-heading {
+  margin-bottom: 25px;
+}
+
+.profile-section-heading span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #ff5a1f;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.profile-section-heading h2 {
+  margin: 0;
+
+  font-size: 25px;
+}
+
+.profile-info-grid {
+  display: grid;
+
+  grid-template-columns:
+        repeat(2, 1fr);
+
+  gap: 18px;
+}
+
+.profile-info-item {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 18px;
+
+  border-radius: 17px;
+
+  background: #fafafa;
+
+  border: 1px solid
+  rgba(0, 0, 0, 0.05);
+}
+
+.profile-info-icon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+          rgba(255, 90, 31, 0.1);
+
+  color: #ff5a1f;
+}
+
+.profile-info-item div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.profile-info-item span {
+  color: #888;
+
+  font-size: 12px;
+}
+
+.profile-info-item strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  font-size: 14px;
+}
+
+
+/* PROFILE STATUS */
+
+.profile-status-card {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 20px;
+
+  padding: 22px;
+
+  border-radius: 20px;
+
+  background:
+          rgba(22, 163, 74, 0.06);
+
+  border:
+          1px solid
+          rgba(22, 163, 74, 0.15);
+}
+
+.profile-status-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+          rgba(22, 163, 74, 0.12);
+
+  color: #16a34a;
+}
+
+.profile-status-card h3 {
+  margin: 0 0 5px;
+
+  font-size: 16px;
+}
+
+.profile-status-card p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+.profile-status-badge {
+  margin-left: auto;
+
+  padding: 7px 12px;
+
+  border-radius: 50px;
+
+  background:
+          rgba(22, 163, 74, 0.12);
+
+  color: #15803d;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   HOME PAGE SMALL UI ENHANCEMENTS
+========================================================= */
+
+.home-page {
+  overflow-x: hidden;
+}
+
+.home-hero {
+  min-height: 610px;
+}
+
+.hero-content {
+  width: min(100% - 40px, 1250px);
+}
+
+.home-container {
+  width: min(100% - 40px, 1250px);
+}
+
+.home-section {
+  scroll-margin-top: 100px;
+}
+
+.category-card-home,
+.restaurant-card-home,
+.food-card-home,
+.why-card {
+  transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+}
+
+.category-card-home:hover,
+.restaurant-card-home:hover,
+.food-card-home:hover,
+.why-card:hover {
+  transform: translateY(-4px);
+}
+
+
+/* FIX BUTTON DEFAULTS */
+
+.see-all {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  font: inherit;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .navbar-inner {
+    width: min(100% - 28px, 1320px);
+  }
+
+  .navlinks {
+    gap: 2px;
+  }
+
+  .nav-item {
+    padding: 9px 8px;
+  }
+
+  .owner-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .navbar-inner {
+    min-height: 66px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .navlinks {
+    overflow-x: auto;
+
+    max-width: calc(100vw - 80px);
+
+    scrollbar-width: none;
+  }
+
+  .navlinks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+
+    font-size: 13px;
+  }
+
+  .nav-item svg {
+    width: 16px;
+  }
+
+  .nav-register {
+    flex-shrink: 0;
+
+    padding: 9px 12px;
+
+    font-size: 12px;
+  }
+
+  .owner-dashboard-page,
+  .profile-page {
+    padding:
+            25px 14px
+            60px;
+  }
+
+  .owner-hero {
+    padding: 28px;
+
+    align-items: flex-start;
+  }
+
+  .owner-hero-icon {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 18px;
+  }
+
+  .owner-hero h1 {
+    font-size: 30px;
+  }
+
+  .owner-hero p {
+    font-size: 14px;
+  }
+
+  .owner-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero {
+    padding: 25px;
+
+    align-items: flex-start;
+  }
+
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+
+    font-size: 21px;
+  }
+
+  .profile-hero h1 {
+    font-size: 24px;
+  }
+
+  .profile-details-card {
+    padding: 23px;
+  }
+
+  .profile-status-card {
+    align-items: flex-start;
+  }
+
+  .profile-status-badge {
+    display: none;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .owner-hero {
+    flex-direction: column;
+  }
+
+  .profile-hero {
+    flex-direction: column;
+  }
+
+  .owner-overview-card {
+    padding: 17px;
+  }
+
+  .owner-dashboard-card {
+    min-height: 220px;
+  }
+
+  .home-container {
+    width: min(100% - 28px, 1250px);
+  }
+
+}
+
+/* =========================================================
+   HOME NAVIGATION IMPROVEMENTS
+   ADD AT THE END OF style.css
+========================================================= */
+
+#search,
+#restaurants {
+  scroll-margin-top: 90px;
+}
+
+
+/* =========================================================
+   NAVBAR SEARCH LINK
+========================================================= */
+
+.navlinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+/* =========================================================
+   RESTAURANT SECTION SCROLL TARGET
+========================================================= */
+
+#restaurants {
+  position: relative;
+}
+
+
+/* =========================================================
+   SEARCH FOCUS
+========================================================= */
+
+.home-search:focus-within {
+  transform: translateY(-1px);
+}
+
+.home-search input:focus {
+  outline: none;
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.search-results-section {
+  min-height: 500px;
+  animation: quickbyteFadeIn 0.35s ease;
+}
+
+.search-results-section .section-heading {
+  margin-bottom: 28px;
+}
+
+.search-empty {
+  min-height: 360px;
+}
+
+.search-empty-image {
+  font-size: 52px;
+  margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   FOOD CARD IMAGE
+========================================================= */
+
+.food-image-home {
+  overflow: hidden;
+}
+
+.food-image-home img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  transition:
+          transform 0.35s ease;
+}
+
+.food-card-home:hover .food-image-home img {
+  transform: scale(1.06);
+}
+
+
+/* =========================================================
+   RESTAURANT CARD IMAGE
+========================================================= */
+
+.restaurant-image-home {
+  overflow: hidden;
+}
+
+.restaurant-image-home img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  transition:
+          transform 0.35s ease;
+}
+
+.restaurant-card-home:hover
+.restaurant-image-home img {
+  transform: scale(1.05);
+}
+
+
+/* =========================================================
+   SMOOTH ANIMATION
+========================================================= */
+
+@keyframes quickbyteFadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE IMPROVEMENTS
+========================================================= */
+
+@media (max-width: 768px) {
+
+  #search,
+  #restaurants {
+    scroll-margin-top: 70px;
+  }
+
+  .navlinks a {
+    gap: 4px;
+  }
+
+}
+
+/* =========================================================
+   QUICKBYTE NAVBAR IMPROVEMENTS
+========================================================= */
+
+.navbar {
+  min-height: 72px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.navlinks a,
+.navlinks button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 40px;
+
+  padding: 8px 13px;
+
+  white-space: nowrap;
+
+  border-radius: 10px;
+
+  line-height: 1;
+
+  font-size: 0.92rem;
+
+  transition:
+          transform 0.2s ease,
+          background 0.2s ease,
+          box-shadow 0.2s ease;
+}
+
+
+.navlinks a:hover,
+.navlinks button:hover {
+  transform: translateY(-1px);
+}
+
+
+/* Search navigation */
+
+.navlinks .nav-item {
+  padding: 8px 14px;
+}
+
+
+/* Profile */
+
+.navlinks .nav-profile {
+  padding: 8px 14px;
+}
+
+
+/* Logout */
+
+.logout-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  min-height: 40px;
+
+  padding: 8px 14px !important;
+
+  border-radius: 10px !important;
+
+  white-space: nowrap;
+
+  line-height: 1;
+}
+
+
+/* Cart count alignment */
+
+.cart-link {
+  position: relative;
+}
+
+
+.cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 19px;
+  height: 19px;
+
+  padding: 0 5px;
+
+  border-radius: 999px;
+
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+
+/* Better section scroll position */
+
+#restaurants,
+#search {
+  scroll-margin-top: 95px;
+}
+
+
+/* =========================================================
+   RESPONSIVE NAVBAR
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .navbar {
+    align-items: flex-start;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .navlinks {
+    gap: 5px;
+  }
+
+  .navlinks a,
+  .navlinks button {
+    padding: 8px 10px;
+    font-size: 0.88rem;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .brand {
+    align-self: flex-start;
+  }
+
+  .navlinks {
+    justify-content: flex-start;
+  }
+
+}
+
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
+
+.admin-hero {
+  min-height: 180px;
+  padding: 36px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 22px;
+
+  background:
+          radial-gradient(
+                  circle at top right,
+                  rgba(232, 122, 77, 0.35),
+                  transparent 35%
+          ),
+          #1f1f21;
+
+  color: white;
+}
+
+
+.dashboard-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  color: #f28b62;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+.admin-hero h1 {
+  margin: 16px 0 8px;
+
+  font-size: 34px;
+}
+
+
+.admin-hero h1 span {
+  color: #f28b62;
+}
+
+
+.admin-hero p {
+  margin: 0;
+
+  color: #b8b8b8;
+}
+
+
+.dashboard-hero-icon {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  color: #f28b62;
+
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* STATS */
+
+.admin-stats {
+  display: grid;
+
+  grid-template-columns:
+        repeat(4, 1fr);
+
+  gap: 16px;
+
+  margin-top: 20px;
+}
+
+
+.admin-stat-card {
+  padding: 24px;
+
+  border: 1px solid #e8e8e8;
+
+  border-radius: 18px;
+
+  background: white;
+
+  box-shadow:
+          0 8px 24px
+          rgba(0, 0, 0, 0.04);
+}
+
+
+.admin-stat-card span {
+  display: block;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: #e8784d;
+}
+
+
+.admin-stat-card strong {
+  display: block;
+
+  margin: 10px 0 6px;
+
+  font-size: 30px;
+
+  color: #242426;
+}
+
+
+.admin-stat-card p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #777;
+}
+
+
+/* MANAGEMENT */
+
+.dashboard-management {
+  margin-top: 44px;
+}
+
+
+.dashboard-section-heading span {
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: #e8784d;
+}
+
+
+.dashboard-section-heading h2 {
+  margin: 8px 0;
+
+  font-size: 27px;
+
+  color: #29292b;
+}
+
+
+.dashboard-section-heading p {
+  margin: 0;
+
+  color: #777;
+}
+
+
+.admin-management-grid {
+  display: grid;
+
+  grid-template-columns:
+        repeat(4, 1fr);
+
+  gap: 16px;
+
+  margin-top: 22px;
+}
+
+
+.admin-management-card {
+  min-height: 220px;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 18px;
+
+  background: white;
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
+}
+
+
+.admin-management-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #f0b198;
+
+  box-shadow:
+          0 14px 30px
+          rgba(0, 0, 0, 0.08);
+}
+
+
+.management-card-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  color: #999;
+}
+
+
+.management-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  color: #e8784d;
+
+  background: #fff0ea;
+}
+
+
+.admin-management-card h3 {
+  margin: 22px 0 8px;
+
+  font-size: 18px;
+
+  color: #29292b;
+}
+
+
+.admin-management-card p {
+  margin: 0;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  color: #777;
+}
+
+
+.manage-link {
+  margin-top: auto;
+
+  padding-top: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #e8784d;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+  .admin-stats,
+  .admin-management-grid {
+    grid-template-columns:
+            repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .admin-hero {
+    padding: 28px;
+
+    align-items: flex-start;
+  }
+
+
+  .dashboard-hero-icon {
+    display: none;
+  }
+
+
+  .admin-stats,
+  .admin-management-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* =========================================================
+   ADMIN RESTAURANTS
+========================================================= */
+
+.admin-page {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 42px 0 70px;
+}
+
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+
+.admin-back-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+.admin-back-link:hover {
+  color: #2563eb;
+}
+
+
+.admin-page-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+
+.admin-page-header h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.1;
+}
+
+
+.admin-page-header p {
+  margin: 12px 0 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+
+.admin-page-stat {
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+
+.admin-page-stat svg {
+  color: #2563eb;
+}
+
+
+.admin-page-stat strong {
+  display: block;
+  font-size: 24px;
+}
+
+
+.admin-page-stat span {
+  display: block;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+.admin-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+
+.admin-content-card {
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.05);
+}
+
+
+.admin-content-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+
+.admin-content-toolbar h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+
+.admin-content-toolbar p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+.admin-search-box {
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid #dbe3ee;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+
+.admin-search-box:focus-within {
+  border-color: #2563eb;
+  background: #ffffff;
+}
+
+
+.admin-search-box svg {
+  color: #64748b;
+}
+
+
+.admin-search-box input {
+  width: 100%;
+  height: 46px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+
+.admin-restaurant-grid {
+  display: grid;
+  grid-template-columns:
+        repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+
+.admin-restaurant-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 310px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
+}
+
+
+.admin-restaurant-card:hover {
+  transform: translateY(-4px);
+  border-color: #bfdbfe;
+  box-shadow:
+          0 14px 30px
+          rgba(15, 23, 42, 0.08);
+}
+
+
+.admin-restaurant-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+
+.admin-restaurant-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+.admin-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+
+.admin-status.pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+.admin-status.approved {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+
+.admin-status.rejected {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+
+.admin-restaurant-info {
+  margin-top: 22px;
+}
+
+
+.admin-restaurant-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+
+.admin-restaurant-info p {
+  display: -webkit-box;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+
+.admin-restaurant-details {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #eef2f7;
+}
+
+
+.admin-restaurant-details span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.admin-restaurant-details svg {
+  flex-shrink: 0;
+  color: #94a3b8;
+}
+
+
+.admin-restaurant-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 20px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+.admin-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+
+.admin-empty-state svg {
+  margin-bottom: 16px;
+  color: #94a3b8;
+}
+
+
+.admin-empty-state h3 {
+  margin: 0;
+  color: #1e293b;
+}
+
+
+.admin-empty-state p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .admin-page {
+    width: min(
+            100% - 28px,
+            1180px
+    );
+    padding-top: 28px;
+  }
+
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+
+  .admin-page-stat {
+    width: 100%;
+  }
+
+
+  .admin-content-card {
+    padding: 20px;
+  }
+
+
+  .admin-content-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+
+  .admin-search-box {
+    min-width: 0;
+    width: 100%;
+  }
+
+
+  .admin-restaurant-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

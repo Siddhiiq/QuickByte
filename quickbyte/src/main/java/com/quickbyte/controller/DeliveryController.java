@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
+
     @PostMapping("/assign")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public DeliveryResponse assignOrder(
             @Valid @RequestBody DeliveryRequest request) {
@@ -26,7 +29,9 @@ public class DeliveryController {
         return deliveryService.assignOrder(request);
     }
 
+
     @PutMapping("/{partnerId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public DeliveryResponse updateStatus(
 
             @PathVariable Long partnerId,
@@ -35,17 +40,25 @@ public class DeliveryController {
 
         return deliveryService.updateDeliveryStatus(
                 partnerId,
-                status);
+                status
+        );
     }
+
 
     @GetMapping("/{partnerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public DeliveryResponse getDelivery(
+
             @PathVariable Long partnerId) {
 
-        return deliveryService.getDelivery(partnerId);
+        return deliveryService.getDelivery(
+                partnerId
+        );
     }
 
+
     @GetMapping("/available")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<DeliveryResponse> getAvailablePartners() {
 
         return deliveryService.getAvailablePartners();

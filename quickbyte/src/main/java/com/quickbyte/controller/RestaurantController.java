@@ -3,12 +3,21 @@ package com.quickbyte.controller;
 import com.quickbyte.dto.Request.RestaurantRequest;
 import com.quickbyte.dto.Response.RestaurantResponse;
 import com.quickbyte.service.RestaurantService;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import com.quickbyte.enums.RestaurantStatus;
+
 
 @RestController
 @RequestMapping("/api/v1/restaurants")
@@ -17,6 +26,7 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
+
     /**
      * Create Restaurant
      */
@@ -24,26 +34,44 @@ public class RestaurantController {
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponse createRestaurant(
-            @Valid @RequestBody RestaurantRequest request) {
 
-        return restaurantService.createRestaurant(request);
+            @Valid
+            @RequestBody
+            RestaurantRequest request) {
+
+        return restaurantService
+                .createRestaurant(request);
     }
 
+
+    /**
+     * Get all restaurants owned by
+     * the currently logged-in restaurant owner.
+     */
     @GetMapping("/my")
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
-    public RestaurantResponse getMyRestaurant() {
+    public List<RestaurantResponse> getMyRestaurants() {
 
-        return restaurantService.getMyRestaurant();
+        return restaurantService
+                .getMyRestaurants();
     }
+
+
     /**
      * Get Restaurant By Id
      */
     @GetMapping("/{restaurantId}")
     public RestaurantResponse getRestaurantById(
-            @PathVariable Long restaurantId) {
 
-        return restaurantService.getRestaurantById(restaurantId);
+            @PathVariable
+            Long restaurantId) {
+
+        return restaurantService
+                .getRestaurantById(
+                        restaurantId
+                );
     }
+
 
     /**
      * Get All Restaurants
@@ -51,21 +79,29 @@ public class RestaurantController {
     @GetMapping
     public Page<RestaurantResponse> getAllRestaurants(
 
-            @RequestParam(defaultValue = "0")
+            @RequestParam(
+                    defaultValue = "0"
+            )
             int page,
 
-            @RequestParam(defaultValue = "10")
+            @RequestParam(
+                    defaultValue = "10"
+            )
             int size,
 
-            @RequestParam(defaultValue = "name")
+            @RequestParam(
+                    defaultValue = "name"
+            )
             String sortBy) {
 
-        return restaurantService.getAllRestaurants(
-                page,
-                size,
-                sortBy
-        );
+        return restaurantService
+                .getAllRestaurants(
+                        page,
+                        size,
+                        sortBy
+                );
     }
+
 
     /**
      * Search Restaurants
@@ -73,20 +109,27 @@ public class RestaurantController {
     @GetMapping("/search")
     public Page<RestaurantResponse> searchRestaurants(
 
-            @RequestParam String keyword,
+            @RequestParam
+            String keyword,
 
-            @RequestParam(defaultValue = "0")
+            @RequestParam(
+                    defaultValue = "0"
+            )
             int page,
 
-            @RequestParam(defaultValue = "10")
+            @RequestParam(
+                    defaultValue = "10"
+            )
             int size) {
 
-        return restaurantService.searchRestaurants(
-                keyword,
-                page,
-                size
-        );
+        return restaurantService
+                .searchRestaurants(
+                        keyword,
+                        page,
+                        size
+                );
     }
+
 
     /**
      * Update Restaurant
@@ -95,27 +138,55 @@ public class RestaurantController {
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     public RestaurantResponse updateRestaurant(
 
-            @PathVariable Long restaurantId,
+            @PathVariable
+            Long restaurantId,
 
             @Valid
             @RequestBody
             RestaurantRequest request) {
 
-        return restaurantService.updateRestaurant(
-                restaurantId,
-                request
-        );
+        return restaurantService
+                .updateRestaurant(
+                        restaurantId,
+                        request
+                );
     }
 
+    /**
+     * Admin Update Restaurant Status
+     */
+    @PatchMapping("/{restaurantId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public RestaurantResponse updateRestaurantStatus(
+
+            @PathVariable
+            Long restaurantId,
+
+            @RequestParam
+            RestaurantStatus status) {
+
+        return restaurantService
+                .updateRestaurantStatus(
+                        restaurantId,
+                        status
+                );
+    }
+
+    /**
+     * Delete Restaurant
+     */
     @DeleteMapping("/{restaurantId}")
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRestaurant(
-            @PathVariable Long restaurantId) {
 
-        restaurantService.deleteRestaurant(
-                restaurantId
-        );
+            @PathVariable
+            Long restaurantId) {
+
+        restaurantService
+                .deleteRestaurant(
+                        restaurantId
+                );
     }
 
 }

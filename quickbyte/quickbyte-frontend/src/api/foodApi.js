@@ -29,3 +29,12 @@ export const getFoodAddons = (foodId) =>
 
 export const getFoodImages = (foodId) =>
   api.get(`/food-images/food/${foodId}`);
+
+export const createFood = (data) =>
+    api.post("/foods", data);
+
+export const updateFood = (id, data) =>
+    api.put(`/foods/${id}`, data);
+
+export const deleteFood = (id) =>
+    api.delete(`/foods/${id}`);

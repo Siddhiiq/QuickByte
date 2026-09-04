@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.quickbyte.enums.OrderStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -34,26 +35,74 @@ public class DeliveryServiceImpl
                 deliveryPartnerRepository.findById(
                                 request.getDeliveryPartnerId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Delivery Partner not found"));
+                                new ResourceNotFoundException(
+                                        "Delivery Partner not found"
+                                )
+                        );
 
         Order order =
                 orderRepository.findById(
                                 request.getOrderId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Order not found"));
+                                new ResourceNotFoundException(
+                                        "Order not found"
+                                )
+                        );
 
-        if (!partner.getAvailable()) {
-            throw new ResourceNotFoundException(
-                    "Delivery Partner is not available");
+        /*
+         * Only orders ready for pickup
+         * can be assigned to a delivery partner.
+         */
+        if (order.getOrderStatus() !=
+                OrderStatus.READY_FOR_PICKUP) {
+
+            throw new IllegalStateException(
+                    "Only orders ready for pickup can be assigned to a delivery partner"
+            );
         }
 
+        /*
+         * Partner must be available.
+         */
+        if (!Boolean.TRUE.equals(
+                partner.getAvailable())) {
+
+            throw new IllegalStateException(
+                    "Delivery Partner is not available"
+            );
+        }
+
+        /*
+         * Assign order to partner.
+         */
         partner.setOrder(order);
+
         partner.setAvailable(false);
+
         partner.setDeliveryStatus(
-                DeliveryStatus.ASSIGNED);
+                DeliveryStatus.ASSIGNED
+        );
+
+        /*
+         * Update the actual order status.
+         */
+        order.setOrderStatus(
+                OrderStatus.OUT_FOR_DELIVERY
+        );
+
+        /*
+         * Save both entities.
+         */
+        orderRepository.save(order);
+
+        DeliveryPartner savedPartner =
+                deliveryPartnerRepository.save(
+                        partner
+                );
 
         return DeliveryMapper.toResponse(
-                deliveryPartnerRepository.save(partner));
+                savedPartner
+        );
     }
 
     @Override
@@ -65,17 +114,58 @@ public class DeliveryServiceImpl
                 deliveryPartnerRepository.findById(
                                 deliveryPartnerId)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Delivery Partner not found"));
+                                new ResourceNotFoundException(
+                                        "Delivery Partner not found"
+                                )
+                        );
+
+        /*
+         * Partner must currently
+         * have an assigned order.
+         */
+        if (partner.getOrder() == null) {
+
+            throw new IllegalStateException(
+                    "No order is currently assigned to this delivery partner"
+            );
+        }
 
         partner.setDeliveryStatus(status);
 
+        /*
+         * Get assigned order.
+         */
+        Order order =
+                partner.getOrder();
+
+        /*
+         * When delivery is completed,
+         * update the actual order.
+         */
         if (status == DeliveryStatus.DELIVERED) {
+
+            order.setOrderStatus(
+                    OrderStatus.DELIVERED
+            );
+
+            orderRepository.save(order);
+
+            /*
+             * Make partner available again.
+             */
             partner.setAvailable(true);
+
             partner.setOrder(null);
         }
 
+        DeliveryPartner savedPartner =
+                deliveryPartnerRepository.save(
+                        partner
+                );
+
         return DeliveryMapper.toResponse(
-                deliveryPartnerRepository.save(partner));
+                savedPartner
+        );
     }
 
     @Override

@@ -1,90 +1,60 @@
 import { Link } from "react-router-dom";
 
 import {
-    Store,
-    LayoutGrid,
-    Utensils,
-    Layers,
-    PlusCircle,
-    Image,
-    Clock3,
+    Building2,
     ClipboardList,
+    Bike,
+    Users,
+    ShieldCheck,
     ArrowUpRight,
     Settings,
+    UserCheck,
 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 
 
-export default function OwnerDashboard() {
+export default function AdminDashboard() {
 
     const { user } = useAuth();
 
 
     const sections = [
         {
-            name: "Restaurant",
+            name: "Restaurants",
             description:
-                "Manage your restaurant information and business details.",
-            path: "/owner/restaurant",
-            icon: Store,
-        },
-        {
-            name: "Categories",
-            description:
-                "Create and organize categories for your menu.",
-            path: "/owner/categories",
-            icon: LayoutGrid,
-        },
-        {
-            name: "Foods",
-            description:
-                "Add, update and manage all your food items.",
-            path: "/owner/foods",
-            icon: Utensils,
-        },
-        {
-            name: "Variants",
-            description:
-                "Configure food sizes, portions and price variants.",
-            path: "/owner/variants",
-            icon: Layers,
-        },
-        {
-            name: "Add-ons",
-            description:
-                "Manage additional items and food customizations.",
-            path: "/owner/addons",
-            icon: PlusCircle,
-        },
-        {
-            name: "Images",
-            description:
-                "Upload and manage restaurant and food images.",
-            path: "/owner/images",
-            icon: Image,
-        },
-        {
-            name: "Timings",
-            description:
-                "Set your restaurant opening and closing schedule.",
-            path: "/owner/timings",
-            icon: Clock3,
+                "Review, approve and manage restaurants on QuickByte.",
+            path: "/admin/restaurants",
+            icon: Building2,
         },
         {
             name: "Orders",
             description:
-                "View incoming customer orders and update their status.",
-            path: "/owner/orders",
+                "Monitor and manage customer orders across restaurants.",
+            path: "/admin/orders",
             icon: ClipboardList,
+        },
+        {
+            name: "Deliveries",
+            description:
+                "Track and manage delivery partners and deliveries.",
+            path: "/admin/deliveries",
+            icon: Bike,
+        },
+        {
+            name: "Users",
+            description:
+                "View and manage customers, owners and platform users.",
+            path: "/admin/users",
+            icon: Users,
         },
     ];
 
 
-    const ownerName =
+    const adminName =
         user?.fullName ||
         user?.name ||
-        "Restaurant Owner";
+        "Admin";
 
 
     return (
@@ -104,9 +74,9 @@ export default function OwnerDashboard() {
 
                         <div className="owner-dashboard-badge">
 
-                            <Settings size={16} />
+                            <ShieldCheck size={16} />
 
-                            RESTAURANT MANAGEMENT
+                            ADMINISTRATION
 
                         </div>
 
@@ -114,15 +84,15 @@ export default function OwnerDashboard() {
                         <h1>
 
                             Welcome back,
-                            <span> {ownerName}</span>
+                            <span> {adminName}</span>
 
                         </h1>
 
 
                         <p>
 
-                            Manage your restaurant, menu and
-                            customer experience from one place.
+                            Manage restaurants, orders, deliveries
+                            and users across the QuickByte platform.
 
                         </p>
 
@@ -131,7 +101,7 @@ export default function OwnerDashboard() {
 
                     <div className="owner-hero-icon">
 
-                        <Store size={42} />
+                        <ShieldCheck size={42} />
 
                     </div>
 
@@ -144,22 +114,23 @@ export default function OwnerDashboard() {
 
                 <section className="owner-overview">
 
+
                     <div className="owner-overview-card">
 
                         <div className="owner-overview-icon">
 
-                            <Store size={21} />
+                            <Building2 size={21} />
 
                         </div>
 
                         <div>
 
                             <span>
-                                Restaurant
+                                Restaurants
                             </span>
 
                             <strong>
-                                Manage details
+                                Review & approve
                             </strong>
 
                         </div>
@@ -171,18 +142,18 @@ export default function OwnerDashboard() {
 
                         <div className="owner-overview-icon">
 
-                            <Utensils size={21} />
+                            <ClipboardList size={21} />
 
                         </div>
 
                         <div>
 
                             <span>
-                                Menu
+                                Orders
                             </span>
 
                             <strong>
-                                Foods & Categories
+                                Monitor activity
                             </strong>
 
                         </div>
@@ -201,11 +172,11 @@ export default function OwnerDashboard() {
                         <div>
 
                             <span>
-                                Management
+                                Administration
                             </span>
 
                             <strong>
-                                Full control
+                                Platform control
                             </strong>
 
                         </div>
@@ -227,15 +198,16 @@ export default function OwnerDashboard() {
                         <div>
 
                             <span>
-                                MANAGEMENT
+                                ADMIN MANAGEMENT
                             </span>
 
                             <h2>
-                                Manage your restaurant
+                                Manage QuickByte
                             </h2>
 
                             <p>
-                                Choose a section to update and manage your business.
+                                Monitor and manage the complete
+                                QuickByte delivery platform.
                             </p>
 
                         </div>

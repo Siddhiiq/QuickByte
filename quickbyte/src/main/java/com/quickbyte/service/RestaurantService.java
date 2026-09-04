@@ -3,20 +3,25 @@ package com.quickbyte.service;
 import com.quickbyte.dto.Request.RestaurantRequest;
 import com.quickbyte.dto.Response.RestaurantResponse;
 import org.springframework.data.domain.Page;
+import com.quickbyte.enums.RestaurantStatus;
+import java.util.List;
 
 public interface RestaurantService {
 
     RestaurantResponse createRestaurant(
-            RestaurantRequest request);
+            RestaurantRequest request
+    );
 
     RestaurantResponse updateRestaurant(
             Long restaurantId,
             RestaurantRequest request
     );
 
-    RestaurantResponse getRestaurantById(Long restaurantId);
+    RestaurantResponse getRestaurantById(
+            Long restaurantId
+    );
 
-    RestaurantResponse getMyRestaurant();
+    List<RestaurantResponse> getMyRestaurants();
 
     Page<RestaurantResponse> getAllRestaurants(
             int page,
@@ -30,6 +35,12 @@ public interface RestaurantService {
             int size
     );
 
-    void deleteRestaurant(Long restaurantId);
+    RestaurantResponse updateRestaurantStatus(
+            Long restaurantId,
+            RestaurantStatus status
+    );
 
+    void deleteRestaurant(
+            Long restaurantId
+    );
 }

@@ -252,15 +252,14 @@ export default function FoodDetails() {
         "ADD TO CART REQUEST:",
         request
       );
-
-await addCartItem({
-  foodId: food.id,
-  variantId: selectedVariant?.id ?? null,
-  quantity,
-  addonIds: selectedAddons.map(
-    (addon) => addon.id
-  ),
-});
+      await addToCart({
+        foodId: food.id,
+        variantId: selectedVariant?.id ?? null,
+        quantity,
+        addonIds: selectedAddons.map(
+            (addon) => addon.id
+        ),
+      });
       setMessage(
         "Added to cart successfully!"
       );

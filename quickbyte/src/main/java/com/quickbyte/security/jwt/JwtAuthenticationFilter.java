@@ -1,6 +1,8 @@
 package com.quickbyte.security.jwt;
 
 import com.quickbyte.security.CustomUserDetailsService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,49 +22,34 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(
-
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain)
-
-            throws ServletException, IOException {
-
-        System.out.println("===== JWT FILTER EXECUTED =====");
-        System.out.println("Request Path : " + request.getServletPath());
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String requestPath = request.getServletPath();
         String method = request.getMethod();
 
         /*
-         * Public APIs
-         *
-         * These APIs should not go through JWT authentication.
+         * Skip authentication only for completely public endpoints.
          */
         if (requestPath.equals("/api/v1/users/register")
                 || requestPath.equals("/api/v1/users/login")
                 || requestPath.equals("/api/v1/users/refresh-token")
-
                 || requestPath.startsWith("/api/v1/email")
                 || requestPath.startsWith("/api/v1/auth")
-
                 || requestPath.startsWith("/v3/api-docs")
                 || requestPath.startsWith("/swagger-ui")
                 || requestPath.startsWith("/swagger-resources")
                 || requestPath.startsWith("/webjars")
 
-                /*
-                 * Public restaurant/menu GET APIs
-                 */
                 || (method.equals("GET")
-                && (
-                requestPath.equals("/api/v1/restaurants")
-                        || requestPath.matches("/api/v1/restaurants/\\d+")
-        ))
+                && requestPath.startsWith("/api/v1/restaurants")
+                && !requestPath.equals("/api/v1/restaurants/my"))
 
                 || (method.equals("GET")
                 && requestPath.startsWith("/api/v1/categories"))
@@ -79,25 +66,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || (method.equals("GET")
                 && requestPath.startsWith("/api/v1/food-addons"))) {
 
-            System.out.println(
-                    "===== PUBLIC API - JWT SKIPPED =====");
-
             filterChain.doFilter(request, response);
             return;
         }
 
-        /*
-         * Get Authorization header
-         */
-        final String authHeader =
+        String authHeader =
                 request.getHeader("Authorization");
 
-        System.out.println(
-                "Authorization Header : " + authHeader);
-
-        /*
-         * No token
-         */
         if (authHeader == null
                 || !authHeader.startsWith("Bearer ")) {
 
@@ -105,64 +80,72 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        /*
-         * Extract JWT
-         */
         String jwtToken =
                 authHeader.substring(7);
 
-        String email =
-                jwtService.extractUsername(jwtToken);
+        try {
 
-        /*
-         * Authenticate user
-         */
-        if (email != null
-                && SecurityContextHolder
-                .getContext()
-                .getAuthentication() == null) {
+            String email =
+                    jwtService.extractUsername(jwtToken);
 
-            UserDetails userDetails =
-                    customUserDetailsService
-                            .loadUserByUsername(email);
+            if (email != null
+                    && SecurityContextHolder
+                    .getContext()
+                    .getAuthentication() == null) {
 
-            String role =
-                    jwtService.extractRole(jwtToken);
+                UserDetails userDetails =
+                        customUserDetailsService
+                                .loadUserByUsername(email);
 
-            System.out.println(
-                    "Authenticated User : " + email);
+                if (jwtService.isTokenValid(
+                        jwtToken,
+                        userDetails.getUsername())) {
 
-            System.out.println(
-                    "JWT Role : " + role);
+                    UsernamePasswordAuthenticationToken
+                            authenticationToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
 
-            System.out.println(
-                    "Authorities : "
-                            + userDetails.getAuthorities());
+                    authenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
 
-            if (jwtService.isTokenValid(
-                    jwtToken,
-                    userDetails.getUsername())) {
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(
+                                    authenticationToken
+                            );
 
-                UsernamePasswordAuthenticationToken
-                        authenticationToken =
-                        new UsernamePasswordAuthenticationToken(
+                    System.out.println(
+                            "JWT AUTHENTICATION SUCCESS: "
+                                    + email
+                    );
 
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-
-                authenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
-
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(
-                                authenticationToken
-                        );
+                    System.out.println(
+                            "AUTHORITIES: "
+                                    + userDetails.getAuthorities()
+                    );
+                }
             }
+
+        } catch (ExpiredJwtException e) {
+
+            System.out.println("JWT TOKEN EXPIRED");
+
+            SecurityContextHolder.clearContext();
+
+        } catch (JwtException e) {
+
+            System.out.println(
+                    "INVALID JWT TOKEN: "
+                            + e.getMessage()
+            );
+
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);

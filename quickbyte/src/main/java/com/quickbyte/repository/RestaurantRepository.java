@@ -6,18 +6,16 @@ import com.quickbyte.enums.RestaurantStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface RestaurantRepository
+        extends JpaRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByEmail(String email);
 
     Optional<Restaurant> findByPhoneNumber(String phoneNumber);
-
-    Optional<Restaurant> findByOwner_Email(String email);
 
     boolean existsByEmail(String email);
 
@@ -25,7 +23,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     List<Restaurant> findByOwner(Users owner);
 
-    Page<Restaurant> findByStatus(RestaurantStatus status, Pageable pageable);
+    List<Restaurant> findByOwner_Email(String email);
+
+    Page<Restaurant> findByStatus(
+            RestaurantStatus status,
+            Pageable pageable
+    );
 
     Page<Restaurant> findByNameContainingIgnoreCase(
             String keyword,

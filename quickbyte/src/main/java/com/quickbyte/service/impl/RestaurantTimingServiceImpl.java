@@ -13,6 +13,7 @@ import com.quickbyte.service.RestaurantTimingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -23,6 +24,7 @@ public class RestaurantTimingServiceImpl
     private final RestaurantTimingRepository timingRepository;
 
     private final RestaurantRepository restaurantRepository;
+
 
     @Override
     public RestaurantTimingResponse createTiming(
@@ -35,7 +37,7 @@ public class RestaurantTimingServiceImpl
                                 new ResourceNotFoundException(
                                         "Restaurant not found"));
 
-        validateTiming(request);
+        validateAndPrepareTiming(request);
 
         if (!timingRepository
                 .findByRestaurantAndDayOfWeek(
@@ -58,6 +60,7 @@ public class RestaurantTimingServiceImpl
         return RestaurantTimingMapper.toResponse(saved);
     }
 
+
     @Override
     public RestaurantTimingResponse getTiming(
             Long timingId) {
@@ -70,6 +73,7 @@ public class RestaurantTimingServiceImpl
 
         return RestaurantTimingMapper.toResponse(timing);
     }
+
 
     @Override
     public List<RestaurantTimingResponse>
@@ -88,6 +92,7 @@ public class RestaurantTimingServiceImpl
                 .toList();
     }
 
+
     @Override
     public RestaurantTimingResponse updateTiming(
             Long timingId,
@@ -99,7 +104,7 @@ public class RestaurantTimingServiceImpl
                                 new ResourceNotFoundException(
                                         "Restaurant timing not found"));
 
-        validateTiming(request);
+        validateAndPrepareTiming(request);
 
         Restaurant restaurant =
                 timing.getRestaurant();
@@ -132,6 +137,7 @@ public class RestaurantTimingServiceImpl
         return RestaurantTimingMapper.toResponse(updated);
     }
 
+
     @Override
     public void deleteTiming(
             Long timingId) {
@@ -145,14 +151,47 @@ public class RestaurantTimingServiceImpl
         timingRepository.delete(timing);
     }
 
-    private void validateTiming(
+
+    private void validateAndPrepareTiming(
             RestaurantTimingRequest request) {
 
+        /*
+         * Restaurant is closed for this day.
+         *
+         * Since opening_time and closing_time columns
+         * are NOT NULL in the database, store 00:00.
+         */
+        if (Boolean.TRUE.equals(request.getClosed())) {
+
+            request.setOpeningTime(LocalTime.MIDNIGHT);
+            request.setClosingTime(LocalTime.MIDNIGHT);
+
+            return;
+        }
+
+
+        /*
+         * Restaurant is open.
+         * Opening and closing times are required.
+         */
+        if (request.getOpeningTime() == null
+                || request.getClosingTime() == null) {
+
+            throw new IllegalArgumentException(
+                    "Opening time and closing time are required"
+            );
+        }
+
+
+        /*
+         * Closing time must be after opening time.
+         */
         if (!request.getClosingTime()
                 .isAfter(request.getOpeningTime())) {
 
             throw new IllegalArgumentException(
-                    "Closing time must be after opening time");
+                    "Closing time must be after opening time"
+            );
         }
     }
 }
