@@ -17,6 +17,10 @@ public interface OrderService {
 
     List<OrderResponse> getAllOrders();
 
+    List<OrderResponse> getOrdersByStatus(
+            String status
+    );
+
 
     OrderResponse updateOrderStatus(
             Long orderId,

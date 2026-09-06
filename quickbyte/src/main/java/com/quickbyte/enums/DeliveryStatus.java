@@ -2,6 +2,8 @@ package com.quickbyte.enums;
 
 public enum DeliveryStatus {
 
+    AVAILABLE,
+
     ASSIGNED,
 
     PICKED_UP,

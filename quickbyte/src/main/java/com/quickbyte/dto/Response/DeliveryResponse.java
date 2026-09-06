@@ -1,6 +1,7 @@
 package com.quickbyte.dto.Response;
 
 import com.quickbyte.enums.DeliveryStatus;
+import com.quickbyte.enums.OrderStatus;
 import lombok.*;
 
 @Getter
@@ -17,6 +18,8 @@ public class DeliveryResponse {
     private String phoneNumber;
 
     private Long orderId;
+
+    private OrderStatus orderStatus;
 
     private DeliveryStatus deliveryStatus;
 

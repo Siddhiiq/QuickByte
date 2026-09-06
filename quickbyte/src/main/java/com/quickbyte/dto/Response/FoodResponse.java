@@ -35,6 +35,8 @@ public class FoodResponse {
 
     private String categoryName;
 
-    // NEW
     private Double price;
+
+    // NEW
+    private String imageUrl;
 }

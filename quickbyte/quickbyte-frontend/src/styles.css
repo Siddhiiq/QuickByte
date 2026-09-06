@@ -6845,3 +6845,1696 @@ html {
   }
 
 }
+
+/* =========================================================
+   ADMIN DELIVERIES
+========================================================= */
+
+.admin-deliveries-page {
+  min-height: 100vh;
+  padding: 42px 20px 80px;
+}
+
+
+.admin-deliveries-container {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.admin-deliveries-hero {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  overflow: hidden;
+
+  padding: 36px 42px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1e293b,
+      #111827
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 15px 40px
+    rgba(15, 23, 42, 0.18);
+}
+
+
+.admin-deliveries-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  right: -70px;
+  top: -80px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(249, 115, 22, 0.22);
+}
+
+
+.admin-deliveries-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color: #fb923c;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+.admin-deliveries-hero h1 {
+  margin: 18px 0 10px;
+
+  font-size:
+    clamp(32px, 4vw, 46px);
+
+  line-height: 1.1;
+}
+
+
+.admin-deliveries-hero h1 span {
+  color: #fb923c;
+}
+
+
+.admin-deliveries-hero p {
+  max-width: 600px;
+
+  margin: 0;
+
+  color: #cbd5e1;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+.admin-deliveries-hero-icon {
+  position: relative;
+
+  z-index: 2;
+
+  width: 74px;
+  height: 74px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 20px;
+
+  background:
+    rgba(255, 255, 255, 0.1);
+
+  color: #fb923c;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.delivery-error {
+  margin-top: 24px;
+
+  padding: 14px 18px;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 12px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+.delivery-refresh-container {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 24px;
+}
+
+
+.delivery-refresh-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 18px
+    rgba(15, 23, 42, 0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.delivery-refresh-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 24px
+    rgba(15, 23, 42, 0.12);
+}
+
+
+/* =========================================================
+   DELIVERY SECTION
+========================================================= */
+
+.delivery-section {
+  margin-top: 42px;
+}
+
+
+.delivery-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+
+.delivery-section-header span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #f97316;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+}
+
+
+.delivery-section-header h2 {
+  margin: 0;
+
+  color: #1e293b;
+
+  font-size: 25px;
+}
+
+
+.delivery-section-header > strong {
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 13px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================================
+   DELIVERY GRID
+========================================================= */
+
+.delivery-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   DELIVERY CARD
+========================================================= */
+
+.delivery-card {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 250px;
+
+  padding: 22px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(15, 23, 42, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.delivery-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #fed7aa;
+
+  box-shadow:
+    0 16px 35px
+    rgba(15, 23, 42, 0.1);
+}
+
+
+.delivery-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.delivery-icon {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: #fff7ed;
+
+  color: #ea580c;
+}
+
+
+.delivery-card h3 {
+  margin: 22px 0 8px;
+
+  color: #1e293b;
+
+  font-size: 19px;
+}
+
+
+.delivery-card > p {
+  margin: 5px 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.available-badge,
+.pickup-badge,
+.active-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+
+  white-space: nowrap;
+}
+
+
+/* AVAILABLE */
+
+.available-badge {
+  background: #ecfdf5;
+
+  color: #059669;
+}
+
+
+/* READY FOR PICKUP */
+
+.pickup-badge {
+  background: #fff7ed;
+
+  color: #ea580c;
+}
+
+
+/* ACTIVE */
+
+.active-badge {
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   DELIVERY STATUS
+========================================================= */
+
+.delivery-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: auto;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #f1f5f9;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+.delivery-status strong {
+  color: #1e293b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SELECT DELIVERY PARTNER
+========================================================= */
+
+.delivery-card select {
+  width: 100%;
+
+  margin-top: 20px;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dbe3ee;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #f8fafc;
+
+  color: #334155;
+
+  font-size: 13px;
+}
+
+
+.delivery-card select:focus {
+  border-color: #f97316;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   ASSIGN DELIVERY BUTTON
+========================================================= */
+
+.assign-delivery-button {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 12px 16px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #f97316;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.assign-delivery-button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.92;
+}
+
+
+/* =========================================================
+   ACTIVE DELIVERY
+========================================================= */
+
+.active-delivery-card {
+  border-color: #bfdbfe;
+}
+
+
+.delivery-current-status {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-top: 20px;
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+
+.delivery-current-status strong {
+  color: #2563eb;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   STATUS BUTTON
+========================================================= */
+
+.status-button {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 16px;
+
+  padding: 12px 16px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.status-button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.92;
+}
+
+
+/* =========================================================
+   EMPTY DELIVERY CARD
+========================================================= */
+
+.empty-delivery-card {
+  grid-column: 1 / -1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  padding: 50px 20px;
+
+  border: 1px dashed #cbd5e1;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  color: #64748b;
+
+  text-align: center;
+}
+
+
+.empty-delivery-card svg {
+  margin-bottom: 14px;
+
+  color: #94a3b8;
+}
+
+
+.empty-delivery-card p {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .admin-deliveries-page {
+    padding:
+      28px 14px
+      60px;
+  }
+
+
+  .admin-deliveries-hero {
+    padding: 28px;
+
+    align-items: flex-start;
+  }
+
+
+  .admin-deliveries-hero-icon {
+    width: 58px;
+    height: 58px;
+  }
+
+
+  .delivery-section-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .delivery-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .delivery-refresh-container {
+    justify-content: flex-start;
+  }
+
+}
+
+/* =========================================================
+   ADMIN USERS
+========================================================= */
+
+.admin-users-page {
+  min-height: 100vh;
+  width: 100%;
+  padding: 42px 20px 70px;
+  background: #f8fafc;
+}
+
+
+.admin-users-container {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.admin-users-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  overflow: hidden;
+  margin-bottom: 36px;
+  padding: 42px;
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #1f2937
+    );
+  color: #ffffff;
+}
+
+
+.admin-users-hero::after {
+  content: "";
+  position: absolute;
+  top: -90px;
+  right: -60px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background:
+    rgba(249, 115, 22, 0.18);
+}
+
+
+.admin-users-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+
+.admin-users-badge {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background:
+    rgba(255, 255, 255, 0.08);
+  color: #fb923c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+
+.admin-users-hero h1 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+}
+
+
+.admin-users-hero h1 span {
+  color: #fb923c;
+}
+
+
+.admin-users-hero p {
+  max-width: 650px;
+  margin: 14px 0 0;
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+.admin-users-hero-icon {
+  position: relative;
+  z-index: 1;
+
+  width: 78px;
+  height: 78px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 20px;
+
+  background:
+    rgba(251, 146, 60, 0.15);
+
+  color: #fb923c;
+}
+
+
+/* =========================
+   USERS SECTION
+========================= */
+
+.admin-users-section {
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow:
+    0 12px 35px
+    rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.admin-users-section
+.owner-section-heading {
+  margin-bottom: 24px;
+}
+
+
+.admin-users-section
+.owner-section-heading span {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #f97316;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+}
+
+
+.admin-users-section
+.owner-section-heading h2 {
+  margin: 0;
+
+  color: #1e293b;
+
+  font-size: 28px;
+}
+
+
+.admin-users-section
+.owner-section-heading p {
+  margin: 8px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.admin-users-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 28px;
+  padding: 0 16px;
+
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+
+  background: #f8fafc;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.admin-users-search:focus-within {
+  border-color: #f97316;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(249, 115, 22, 0.08);
+}
+
+
+.admin-users-search svg {
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+
+.admin-users-search input {
+  width: 100%;
+  height: 50px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #1e293b;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   USERS GRID
+========================= */
+
+.admin-users-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(280px, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/* =========================
+   USER CARD
+========================= */
+
+.admin-user-card {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 280px;
+
+  padding: 22px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.admin-user-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #fed7aa;
+
+  box-shadow:
+    0 16px 32px
+    rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.admin-user-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+
+.admin-user-avatar {
+  width: 50px;
+  height: 50px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #fff7ed;
+
+  color: #f97316;
+}
+
+
+.admin-user-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 8px 11px;
+
+  border-radius: 999px;
+
+  background: #f8fafc;
+
+  color: #475569;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   USER INFO
+========================= */
+
+.admin-user-info {
+  margin-top: 24px;
+}
+
+
+.admin-user-info h3 {
+  margin: 0 0 18px;
+
+  color: #1e293b;
+
+  font-size: 19px;
+}
+
+
+.admin-user-detail {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin-top: 11px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  overflow: hidden;
+}
+
+
+.admin-user-detail svg {
+  flex-shrink: 0;
+
+  color: #94a3b8;
+}
+
+
+.admin-user-detail span {
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================
+   USER FOOTER
+========================= */
+
+.admin-user-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+  padding-top: 20px;
+
+  border-top: 1px solid #eef2f7;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+.admin-user-footer strong {
+  color: #f97316;
+}
+
+
+/* =========================================================
+   ADMIN DELIVERIES
+========================================================= */
+
+.admin-deliveries-page {
+  min-height: 100vh;
+  width: 100%;
+
+  padding: 42px 20px 70px;
+
+  background: #f8fafc;
+}
+
+
+.admin-deliveries-container {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.admin-deliveries-hero {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  overflow: hidden;
+
+  margin-bottom: 28px;
+
+  padding: 38px 42px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #1e293b
+    );
+
+  color: #ffffff;
+}
+
+
+.admin-deliveries-hero::after {
+  content: "";
+
+  position: absolute;
+
+  top: -100px;
+  right: -70px;
+
+  width: 240px;
+  height: 240px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(249, 115, 22, 0.2);
+}
+
+
+.admin-deliveries-hero > div:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+
+.admin-deliveries-badge {
+  width: fit-content;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 18px;
+
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color: #fb923c;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+.admin-deliveries-hero h1 {
+  margin: 0;
+
+  font-size: clamp(32px, 4vw, 48px);
+
+  line-height: 1.1;
+}
+
+
+.admin-deliveries-hero h1 span {
+  color: #fb923c;
+}
+
+
+.admin-deliveries-hero p {
+  margin: 14px 0 0;
+
+  color: #cbd5e1;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+.admin-deliveries-hero-icon {
+  position: relative;
+  z-index: 1;
+
+  width: 78px;
+  height: 78px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 20px;
+
+  background:
+    rgba(249, 115, 22, 0.15);
+
+  color: #fb923c;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.delivery-error {
+  margin-bottom: 22px;
+
+  padding: 14px 18px;
+
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+.delivery-refresh-container {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-bottom: 24px;
+}
+
+
+.delivery-refresh-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 11px 16px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.delivery-refresh-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px
+    rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================
+   DELIVERY SECTION
+========================= */
+
+.delivery-section {
+  margin-top: 34px;
+}
+
+
+.delivery-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+
+.delivery-section-header span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #f97316;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+}
+
+
+.delivery-section-header h2 {
+  margin: 0;
+
+  color: #1e293b;
+
+  font-size: 25px;
+}
+
+
+.delivery-section-header > strong {
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 13px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================
+   DELIVERY GRID
+========================= */
+
+.delivery-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(290px, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/* =========================
+   DELIVERY CARD
+========================= */
+
+.delivery-card {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 260px;
+
+  padding: 22px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(15, 23, 42, 0.04);
+}
+
+
+.delivery-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+
+.delivery-icon {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: #fff7ed;
+
+  color: #f97316;
+}
+
+
+.delivery-card h3 {
+  margin: 22px 0 10px;
+
+  color: #1e293b;
+
+  font-size: 19px;
+}
+
+
+.delivery-card p {
+  margin: 7px 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+.available-badge,
+.pickup-badge,
+.active-badge {
+  display: inline-flex;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+.available-badge {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+
+.pickup-badge {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+.active-badge {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.delivery-status,
+.delivery-current-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 18px;
+  padding-top: 16px;
+
+  border-top: 1px solid #eef2f7;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+.delivery-status strong,
+.delivery-current-status strong {
+  color: #1e293b;
+}
+
+
+/* =========================
+   SELECT
+========================= */
+
+.delivery-card select {
+  width: 100%;
+
+  margin-top: 18px;
+  padding: 12px;
+
+  border: 1px solid #dbe3ee;
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #f8fafc;
+
+  color: #334155;
+
+  font-size: 13px;
+}
+
+
+.delivery-card select:focus {
+  border-color: #f97316;
+
+  background: #ffffff;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.assign-delivery-button,
+.status-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  width: 100%;
+
+  margin-top: 14px;
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f97316;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.assign-delivery-button:hover,
+.status-button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.92;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-delivery-card {
+  grid-column: 1 / -1;
+
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 30px;
+
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  color: #94a3b8;
+
+  text-align: center;
+}
+
+
+.empty-delivery-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ADMIN RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .admin-users-page,
+  .admin-deliveries-page {
+    padding:
+      28px 14px
+      50px;
+  }
+
+
+  .admin-users-hero,
+  .admin-deliveries-hero {
+    padding: 28px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+
+  .admin-users-section {
+    padding: 20px;
+  }
+
+
+  .admin-users-grid,
+  .delivery-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .delivery-section-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .delivery-refresh-container {
+    justify-content: flex-start;
+  }
+
+}
+
+.admin-users-count {
+    margin: 18px 0;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.owner-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+
+    .owner-section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}

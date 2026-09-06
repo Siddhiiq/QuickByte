@@ -17,6 +17,8 @@ public class CartItemResponse {
 
     private String foodName;
 
+    private String imageUrl;
+
     private Long variantId;
 
     private String variantType;

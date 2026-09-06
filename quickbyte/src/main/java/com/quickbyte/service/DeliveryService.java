@@ -9,15 +9,22 @@ import java.util.List;
 public interface DeliveryService {
 
     DeliveryResponse assignOrder(
-            DeliveryRequest request);
+            DeliveryRequest request
+    );
 
     DeliveryResponse updateDeliveryStatus(
             Long deliveryPartnerId,
-            DeliveryStatus status);
+            DeliveryStatus status
+    );
 
     DeliveryResponse getDelivery(
-            Long deliveryPartnerId);
+            Long deliveryPartnerId
+    );
 
-    List<DeliveryResponse> getAvailablePartners();
+    List<DeliveryResponse>
+    getAvailablePartners();
+
+    List<DeliveryResponse>
+    getActiveDeliveries();
 
 }

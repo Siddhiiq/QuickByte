@@ -53,6 +53,7 @@ import AdminRestaurants from "./pages/AdminRestaurants";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetails from "./pages/AdminOrderDetails";
 import AdminDeliveries from "./pages/AdminDeliveries";
+import AdminUsers from "./pages/AdminUsers";
 
 
 
@@ -327,6 +328,15 @@ export default function App() {
                     element={
                         <ProtectedRoute roles={["ADMIN"]}>
                             <AdminOrderDetails />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/users"
+                    element={
+                        <ProtectedRoute roles={["ADMIN"]}>
+                            <AdminUsers />
                         </ProtectedRoute>
                     }
                 />

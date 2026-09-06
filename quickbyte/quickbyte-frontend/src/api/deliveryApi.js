@@ -1,65 +1,94 @@
 import api from "./axios";
 
 
-/* =========================
-   DELIVERY PARTNERS
-========================= */
+/*
+================================
+GET AVAILABLE DELIVERY PARTNERS
+================================
+*/
 
-export const getAvailablePartners =
-    () =>
-        api.get(
-            "/delivery/available"
-        );
+export const getAvailablePartners = () => {
 
+    return api.get(
+        "/delivery/available"
+    );
 
-export const getDelivery =
-    (partnerId) =>
-        api.get(
-            `/delivery/${partnerId}`
-        );
+};
 
 
-/* =========================
-   DELIVERY MANAGEMENT
-========================= */
+/*
+================================
+GET ACTIVE DELIVERIES
+================================
+*/
 
-export const assignDeliveryPartner =
-    (
-        orderId,
-        deliveryPartnerId
-    ) =>
-        api.post(
-            "/delivery/assign",
-            {
-                orderId,
-                deliveryPartnerId,
+export const getActiveDeliveries = () => {
+
+    return api.get(
+        "/delivery/active"
+    );
+
+};
+
+
+/*
+================================
+GET DELIVERY BY PARTNER ID
+================================
+*/
+
+export const getDelivery = (
+    partnerId
+) => {
+
+    return api.get(
+        `/delivery/${partnerId}`
+    );
+
+};
+
+
+/*
+================================
+ASSIGN ORDER TO DELIVERY PARTNER
+================================
+*/
+
+export const assignDelivery = (
+    data
+) => {
+
+    return api.post(
+        "/delivery/assign",
+        data
+    );
+
+};
+
+
+/*
+================================
+UPDATE DELIVERY STATUS
+================================
+*/
+
+export const updateDeliveryStatus = (
+    partnerId,
+    status
+) => {
+
+    return api.put(
+
+        `/delivery/${partnerId}/status`,
+
+        null,
+
+        {
+            params: {
+                status: status
             }
-        );
+        }
 
+    );
 
-export const updateDeliveryStatus =
-    (
-        partnerId,
-        status
-    ) =>
-        api.put(
-            `/delivery/${partnerId}/status`,
-            null,
-            {
-                params: {
-                    status,
-                },
-            }
-        );
-
-
-/* =========================
-   DELIVERY PARTNER MANAGEMENT
-========================= */
-
-export const createDeliveryPartner =
-    (data) =>
-        api.post(
-            "/delivery-partners",
-            data
-        );
+};

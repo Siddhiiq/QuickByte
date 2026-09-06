@@ -10,4 +10,9 @@ public interface DeliveryPartnerRepository
 
     List<DeliveryPartner> findByAvailableTrue();
 
+    List<DeliveryPartner> findByAvailableFalse();
+
+
+    boolean existsByOrderId(Long orderId);
+
 }

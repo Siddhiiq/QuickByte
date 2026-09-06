@@ -40,9 +40,7 @@ public class DeliveryPartner extends BaseEntity {
         }
 
         if (deliveryStatus == null) {
-            deliveryStatus = DeliveryStatus.ASSIGNED;
+            deliveryStatus = DeliveryStatus.AVAILABLE;
         }
-
     }
-
 }

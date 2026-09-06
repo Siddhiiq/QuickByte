@@ -12,16 +12,32 @@ public class DeliveryMapper {
             DeliveryPartner partner) {
 
         return DeliveryResponse.builder()
-                .deliveryPartnerId(partner.getId())
-                .deliveryPartnerName(partner.getName())
-                .phoneNumber(partner.getPhoneNumber())
+                .deliveryPartnerId(
+                        partner.getId()
+                )
+                .deliveryPartnerName(
+                        partner.getName()
+                )
+                .phoneNumber(
+                        partner.getPhoneNumber()
+                )
                 .orderId(
                         partner.getOrder() != null
                                 ? partner.getOrder().getId()
                                 : null
                 )
-                .deliveryStatus(partner.getDeliveryStatus())
-                .available(partner.getAvailable())
+                .orderStatus(
+                        partner.getOrder() != null
+                                ? partner.getOrder()
+                                .getOrderStatus()
+                                : null
+                )
+                .deliveryStatus(
+                        partner.getDeliveryStatus()
+                )
+                .available(
+                        partner.getAvailable()
+                )
                 .build();
     }
 }

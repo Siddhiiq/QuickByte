@@ -1,58 +1,145 @@
 import {
     useEffect,
-    useState,
+    useState
 } from "react";
 
 import {
-    Link,
-} from "react-router-dom";
-
-import {
-    ArrowLeft,
     Bike,
-    ClipboardList,
-    RefreshCw,
-    UserRound,
-    PackageCheck,
-    IndianRupee,
-    XCircle,
-    CheckCircle2,
-    Clock3,
+    Package,
+    UserCheck,
+    Truck,
+    CheckCircle,
+    RefreshCw
 } from "lucide-react";
 
 import {
-    getAllOrders,
-} from "../api/orderApi";
-
-import {
     getAvailablePartners,
-    assignDeliveryPartner,
+    getActiveDeliveries,
+    assignDelivery,
+    updateDeliveryStatus
 } from "../api/deliveryApi";
 
-import Loading from "../components/Loading";
+import api from "../api/axios";
 
 
 export default function AdminDeliveries() {
 
-    const [orders, setOrders] =
-        useState([]);
 
-    const [partners, setPartners] =
-        useState([]);
+    /*
+    ================================
+    STATES
+    ================================
+    */
 
-    const [loading, setLoading] =
-        useState(true);
-
-    const [error, setError] =
-        useState("");
-
-    const [assigningOrderId, setAssigningOrderId] =
-        useState(null);
+    const [
+        availablePartners,
+        setAvailablePartners
+    ] = useState([]);
 
 
-    /* =========================
-       LOAD DATA
-    ========================= */
+    const [
+        activeDeliveries,
+        setActiveDeliveries
+    ] = useState([]);
+
+
+    const [
+        readyOrders,
+        setReadyOrders
+    ] = useState([]);
+
+
+    const [
+        selectedPartners,
+        setSelectedPartners
+    ] = useState({});
+
+
+    const [
+        loading,
+        setLoading
+    ] = useState(true);
+
+
+    const [
+        error,
+        setError
+    ] = useState("");
+
+
+    /*
+    ================================
+    LOAD ALL DELIVERY DATA
+    ================================
+    */
+
+    const loadDeliveryData = async () => {
+
+        try {
+
+            setLoading(true);
+
+            setError("");
+
+
+            const [
+                availableResponse,
+                activeResponse,
+                ordersResponse
+            ] = await Promise.all([
+
+                getAvailablePartners(),
+
+                getActiveDeliveries(),
+
+                api.get(
+                    "/orders/status/READY_FOR_PICKUP"
+                )
+
+            ]);
+
+
+            setAvailablePartners(
+                availableResponse.data
+            );
+
+
+            setActiveDeliveries(
+                activeResponse.data
+            );
+
+
+            setReadyOrders(
+                ordersResponse.data
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load delivery data:",
+                error
+            );
+
+
+            setError(
+                "Failed to load delivery information."
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+
+    /*
+    ================================
+    INITIAL LOAD
+    ================================
+    */
 
     useEffect(() => {
 
@@ -61,283 +148,268 @@ export default function AdminDeliveries() {
     }, []);
 
 
-    const loadDeliveryData =
-        async () => {
 
-            try {
+    /*
+    ================================
+    SELECT DELIVERY PARTNER
+    ================================
+    */
 
-                setLoading(true);
-                setError("");
+    const handlePartnerChange = (
+        orderId,
+        partnerId
+    ) => {
 
-                const [
-                    orderResponse,
-                    partnerResponse,
-                ] = await Promise.all([
+        setSelectedPartners(
+            previous => ({
 
-                    getAllOrders(),
+                ...previous,
 
-                    getAvailablePartners(),
+                [orderId]: partnerId
 
-                ]);
+            })
+        );
 
-
-                const orderData =
-                    orderResponse.data?.content ||
-                    orderResponse.data ||
-                    [];
-
-
-                const availableOrders =
-                    Array.isArray(orderData)
-                        ? orderData.filter(
-                            (order) =>
-                                order.orderStatus ===
-                                "READY_FOR_PICKUP"
-                        )
-                        : [];
+    };
 
 
-                setOrders(
-                    availableOrders
-                );
+
+    /*
+    ================================
+    ASSIGN DELIVERY
+    ================================
+    */
+
+    const handleAssignDelivery = async (
+        orderId
+    ) => {
+
+        const partnerId =
+            selectedPartners[orderId];
 
 
-                const partnerData =
-                    partnerResponse.data?.content ||
-                    partnerResponse.data ||
-                    [];
+        if (!partnerId) {
+
+            alert(
+                "Please select a delivery partner."
+            );
+
+            return;
+
+        }
 
 
-                setPartners(
-                    Array.isArray(partnerData)
-                        ? partnerData
-                        : []
-                );
+        try {
 
-            } catch (error) {
+            await assignDelivery({
 
-                console.error(
-                    "Failed to load delivery data:",
-                    error
-                );
+                orderId: Number(orderId),
 
-                setError(
-                    error.response?.data?.message ||
-                    "Unable to load delivery data."
-                );
-
-            } finally {
-
-                setLoading(false);
-
-            }
-
-        };
-
-
-    /* =========================
-       ASSIGN PARTNER
-    ========================= */
-
-    const handleAssign =
-        async (
-            orderId,
-            partnerId
-        ) => {
-
-            if (!partnerId) {
-
-                setError(
-                    "Please select a delivery partner."
-                );
-
-                return;
-
-            }
-
-            try {
-
-                setAssigningOrderId(
-                    orderId
-                );
-
-                setError("");
-
-                await assignDeliveryPartner(
-                    orderId,
+                deliveryPartnerId:
                     Number(partnerId)
-                );
 
-                /*
-                 * Reload orders and partners
-                 * after successful assignment.
-                 */
-                await loadDeliveryData();
+            });
 
-            } catch (error) {
 
-                console.error(
-                    "Failed to assign delivery partner:",
-                    error
-                );
+            alert(
+                "Order assigned successfully."
+            );
 
-                setError(
-                    error.response?.data?.message ||
-                    "Unable to assign delivery partner."
-                );
 
-            } finally {
+            await loadDeliveryData();
 
-                setAssigningOrderId(
-                    null
-                );
 
-            }
+        } catch (error) {
 
-        };
+            console.error(
+                "Failed to assign delivery:",
+                error
+            );
 
+
+            alert(
+
+                error?.response?.data?.message ||
+
+                "Failed to assign delivery."
+
+            );
+
+        }
+
+    };
+
+
+
+    /*
+    ================================
+    UPDATE DELIVERY STATUS
+    ================================
+    */
+
+    const handleStatusUpdate = async (
+
+        partnerId,
+
+        status
+
+    ) => {
+
+        try {
+
+            await updateDeliveryStatus(
+
+                partnerId,
+
+                status
+
+            );
+
+
+            await loadDeliveryData();
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to update delivery status:",
+                error
+            );
+
+
+            alert(
+
+                error?.response?.data?.message ||
+
+                "Failed to update delivery status."
+
+            );
+
+        }
+
+    };
+
+
+
+    /*
+    ================================
+    LOADING
+    ================================
+    */
 
     if (loading) {
 
-        return <Loading />;
+        return (
 
-    }
+            <main className="admin-deliveries-page">
 
-
-    return (
-
-        <main className="admin-page">
-
-
-            {/* =========================
-                HEADER
-            ========================= */}
-
-            <section className="admin-page-header">
-
-                <div>
-
-                    <Link
-                        to="/admin"
-                        className="admin-back-link"
-                    >
-
-                        <ArrowLeft size={18} />
-
-                        Back to Dashboard
-
-                    </Link>
-
-
-                    <span className="admin-page-eyebrow">
-
-                        DELIVERY MANAGEMENT
-
-                    </span>
-
-
-                    <h1>
-
-                        Deliveries
-
-                    </h1>
-
+                <div className="admin-deliveries-container">
 
                     <p>
-
-                        Assign delivery partners to
-                        orders that are ready for pickup.
-
+                        Loading deliveries...
                     </p>
 
                 </div>
 
+            </main>
 
-                <div className="admin-page-stat">
+        );
 
-                    <PackageCheck size={22} />
+    }
+
+
+
+    /*
+    ================================
+    UI
+    ================================
+    */
+
+    return (
+
+        <main className="admin-deliveries-page">
+
+            <div className="admin-deliveries-container">
+
+
+                {/* =========================
+                    HEADER
+                ========================= */}
+
+                <section className="admin-deliveries-hero">
 
                     <div>
 
-                        <strong>
+                        <span className="admin-deliveries-badge">
 
-                            {orders.length}
+                            <Bike size={15} />
 
-                        </strong>
-
-                        <span>
-
-                            Ready for Pickup
+                            DELIVERY MANAGEMENT
 
                         </span>
 
-                    </div>
 
-                </div>
+                        <h1>
 
-            </section>
+                            Manage
+                            <span> Deliveries</span>
 
+                        </h1>
 
-            {/* =========================
-                ERROR
-            ========================= */}
-
-            {error && (
-
-                <div className="admin-error">
-
-                    <XCircle size={19} />
-
-                    <span>
-
-                        {error}
-
-                    </span>
-
-                </div>
-
-            )}
-
-
-            {/* =========================
-                AVAILABLE PARTNERS
-            ========================= */}
-
-            <section className="admin-content-card">
-
-                <div className="admin-content-toolbar">
-
-                    <div>
-
-                        <h2>
-
-                            Available Delivery Partners
-
-                        </h2>
 
                         <p>
 
-                            {partners.length} partner
-                            {partners.length !== 1
-                                ? "s"
-                                : ""
-                            }
-                            {" "}currently available.
+                            Assign orders, monitor delivery
+                            partners and track active deliveries.
 
                         </p>
 
                     </div>
 
 
+                    <div className="admin-deliveries-hero-icon">
+
+                        <Truck size={40} />
+
+                    </div>
+
+                </section>
+
+
+
+                {/* =========================
+                    ERROR
+                ========================= */}
+
+                {error && (
+
+                    <div className="delivery-error">
+
+                        {error}
+
+                    </div>
+
+                )}
+
+
+
+                {/* =========================
+                    REFRESH BUTTON
+                ========================= */}
+
+                <div className="delivery-refresh-container">
+
                     <button
-                        type="button"
-                        className="primary"
+
+                        className="delivery-refresh-button"
+
                         onClick={
                             loadDeliveryData
                         }
+
                     >
 
-                        <RefreshCw size={17} />
+                        <RefreshCw size={16} />
 
                         Refresh
 
@@ -346,64 +418,93 @@ export default function AdminDeliveries() {
                 </div>
 
 
-                {partners.length === 0 ? (
 
-                    <div className="admin-empty-state">
+                {/* =========================
+                    AVAILABLE PARTNERS
+                ========================= */}
 
-                        <Bike size={42} />
+                <section className="delivery-section">
 
-                        <h3>
+                    <div className="delivery-section-header">
 
-                            No delivery partners available
+                        <div>
 
-                        </h3>
+                            <span>
+                                DELIVERY PARTNERS
+                            </span>
 
-                        <p>
+                            <h2>
 
-                            Create or wait for a delivery
-                            partner to become available.
+                                Available Delivery Partners
 
-                        </p>
+                            </h2>
+
+                        </div>
+
+
+                        <strong>
+
+                            {
+                                availablePartners.length
+                            }
+
+                            {" "}Available
+
+                        </strong>
 
                     </div>
 
-                ) : (
 
-                    <div className="admin-restaurant-grid">
 
-                        {partners.map(
-                            (partner) => (
+                    <div className="delivery-grid">
 
-                                <div
-                                    key={
-                                        partner.deliveryPartnerId
-                                    }
-                                    className="admin-restaurant-card"
-                                >
 
-                                    <div className="admin-restaurant-card-top">
+                        {availablePartners.length === 0 ? (
 
-                                        <div className="admin-restaurant-icon">
+                            <div className="empty-delivery-card">
 
-                                            <Bike size={24} />
+                                <UserCheck size={30} />
+
+                                <p>
+
+                                    No available delivery partners.
+
+                                </p>
+
+                            </div>
+
+                        ) : (
+
+                            availablePartners.map(
+                                partner => (
+
+                                    <div
+
+                                        key={
+                                            partner.deliveryPartnerId
+                                        }
+
+                                        className="delivery-card"
+
+                                    >
+
+                                        <div className="delivery-card-top">
+
+                                            <div className="delivery-icon">
+
+                                                <Bike size={22} />
+
+                                            </div>
+
+
+                                            <span className="available-badge">
+
+                                                AVAILABLE
+
+                                            </span>
 
                                         </div>
 
-
-                                        <span className="admin-status approved">
-
-                                            <CheckCircle2
-                                                size={16}
-                                            />
-
-                                            AVAILABLE
-
-                                        </span>
-
-                                    </div>
-
-
-                                    <div className="admin-restaurant-info">
 
                                         <h3>
 
@@ -413,11 +514,8 @@ export default function AdminDeliveries() {
 
                                         </h3>
 
-                                        <p>
 
-                                            <UserRound
-                                                size={14}
-                                            />
+                                        <p>
 
                                             {
                                                 partner.phoneNumber
@@ -425,123 +523,115 @@ export default function AdminDeliveries() {
 
                                         </p>
 
-                                    </div>
 
-
-                                    <div className="admin-restaurant-details">
-
-                                        <span>
+                                        <div className="delivery-status">
 
                                             Status:
-                                            {" "}
-                                            {
-                                                partner.deliveryStatus
-                                            }
 
-                                        </span>
+                                            <strong>
+
+                                                {
+                                                    partner.deliveryStatus
+                                                }
+
+                                            </strong>
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                )
 
                             )
+
                         )}
 
-                    </div>
-
-                )}
-
-            </section>
-
-
-            {/* =========================
-                READY FOR PICKUP ORDERS
-            ========================= */}
-
-            <section className="admin-content-card">
-
-                <div className="admin-content-toolbar">
-
-                    <div>
-
-                        <h2>
-
-                            Orders Ready for Pickup
-
-                        </h2>
-
-                        <p>
-
-                            Select a delivery partner
-                            and assign the order.
-
-                        </p>
 
                     </div>
 
-                </div>
+                </section>
 
 
-                {orders.length === 0 ? (
 
-                    <div className="admin-empty-state">
+                {/* =========================
+                    READY FOR PICKUP ORDERS
+                ========================= */}
 
-                        <ClipboardList size={42} />
+                <section className="delivery-section">
 
-                        <h3>
+                    <div className="delivery-section-header">
 
-                            No orders ready for pickup
+                        <div>
 
-                        </h3>
+                            <span>
+                                ORDERS
+                            </span>
 
-                        <p>
+                            <h2>
 
-                            Orders will appear here when
-                            restaurant owners mark them
-                            as ready for pickup.
+                                Ready For Pickup Orders
 
-                        </p>
+                            </h2>
+
+                        </div>
+
+
+                        <strong>
+
+                            {
+                                readyOrders.length
+                            }
+
+                            {" "}Orders
+
+                        </strong>
 
                     </div>
 
-                ) : (
-
-                    <div className="admin-restaurant-grid">
-
-                        {orders.map(
-                            (order) => {
-
-                                const total =
-                                    order.grandTotal ??
-                                    order.totalAmount ??
-                                    "-";
 
 
-                                return (
+                    <div className="delivery-grid">
+
+
+                        {readyOrders.length === 0 ? (
+
+                            <div className="empty-delivery-card">
+
+                                <Package size={30} />
+
+                                <p>
+
+                                    No orders are ready for pickup.
+
+                                </p>
+
+                            </div>
+
+                        ) : (
+
+                            readyOrders.map(
+                                order => (
 
                                     <div
+
                                         key={order.id}
-                                        className="admin-restaurant-card"
+
+                                        className="delivery-card"
+
                                     >
 
-                                        {/* TOP */}
+                                        <div className="delivery-card-top">
 
-                                        <div className="admin-restaurant-card-top">
+                                            <div className="delivery-icon">
 
-                                            <div className="admin-restaurant-icon">
-
-                                                <PackageCheck
-                                                    size={24}
+                                                <Package
+                                                    size={22}
                                                 />
 
                                             </div>
 
 
-                                            <span className="admin-status pending">
-
-                                                <Clock3
-                                                    size={16}
-                                                />
+                                            <span className="pickup-badge">
 
                                                 READY FOR PICKUP
 
@@ -550,86 +640,79 @@ export default function AdminDeliveries() {
                                         </div>
 
 
-                                        {/* ORDER INFO */}
+                                        <h3>
 
-                                        <div className="admin-restaurant-info">
+                                            Order #
 
-                                            <h3>
+                                            {order.id}
 
-                                                Order #{order.id}
-
-                                            </h3>
-
-                                            <p>
-
-                                                Customer:
-                                                {" "}
-                                                {
-                                                    order.customerName ||
-                                                    "Customer"
-                                                }
-
-                                            </p>
-
-                                        </div>
+                                        </h3>
 
 
-                                        {/* DETAILS */}
+                                        <p>
 
-                                        <div className="admin-restaurant-details">
+                                            Customer:
 
-                                            <span>
+                                            {" "}
 
-                                                Restaurant:
-                                                {" "}
-                                                {
-                                                    order.restaurantName ||
-                                                    "Restaurant"
-                                                }
+                                            {
+                                                order.customerName ||
+                                                "Customer"
+                                            }
 
-                                            </span>
+                                        </p>
 
 
-                                            <span>
 
-                                                <IndianRupee
-                                                    size={15}
-                                                />
+                                        {/* SELECT PARTNER */}
 
-                                                {total}
+                                        <select
 
-                                            </span>
+                                            value={
 
-                                        </div>
+                                                selectedPartners[
+                                                    order.id
+                                                ] || ""
+
+                                            }
+
+                                            onChange={event =>
+
+                                                handlePartnerChange(
+
+                                                    order.id,
+
+                                                    event.target.value
+
+                                                )
+
+                                            }
+
+                                        >
+
+                                            <option value="">
+
+                                                Select Delivery Partner
+
+                                            </option>
 
 
-                                        {/* ASSIGN */}
+                                            {
 
-                                        <div className="admin-restaurant-footer">
+                                                availablePartners.map(
 
-                                            <select
-                                                defaultValue=""
-                                                id={`partner-${order.id}`}
-                                                className="delivery-select"
-                                            >
-
-                                                <option value="">
-
-                                                    Select Partner
-
-                                                </option>
-
-
-                                                {partners.map(
-                                                    (partner) => (
+                                                    partner => (
 
                                                         <option
+
                                                             key={
                                                                 partner.deliveryPartnerId
                                                             }
+
                                                             value={
                                                                 partner.deliveryPartnerId
                                                             }
+
                                                         >
 
                                                             {
@@ -639,57 +722,312 @@ export default function AdminDeliveries() {
                                                         </option>
 
                                                     )
-                                                )}
 
-                                            </select>
+                                                )
+
+                                            }
+
+                                        </select>
 
 
-                                            <button
-                                                type="button"
-                                                className="primary"
-                                                disabled={
-                                                    assigningOrderId ===
+
+                                        <button
+
+                                            className="assign-delivery-button"
+
+                                            onClick={() =>
+
+                                                handleAssignDelivery(
                                                     order.id
-                                                }
-                                                onClick={() => {
+                                                )
 
-                                                    const select =
-                                                        document.getElementById(
-                                                            `partner-${order.id}`
-                                                        );
+                                            }
 
-                                                    handleAssign(
-                                                        order.id,
-                                                        select?.value
-                                                    );
+                                        >
 
-                                                }}
-                                            >
+                                            Assign Delivery
 
-                                                <Bike size={16} />
-
-                                                {assigningOrderId ===
-                                                order.id
-                                                    ? "Assigning..."
-                                                    : "Assign"
-                                                }
-
-                                            </button>
-
-                                        </div>
+                                        </button>
 
                                     </div>
 
-                                );
+                                )
 
-                            }
+                            )
+
                         )}
+
 
                     </div>
 
-                )}
+                </section>
 
-            </section>
+
+
+                {/* =========================
+                    ACTIVE DELIVERIES
+                ========================= */}
+
+                <section className="delivery-section">
+
+                    <div className="delivery-section-header">
+
+                        <div>
+
+                            <span>
+                                DELIVERY TRACKING
+                            </span>
+
+                            <h2>
+
+                                Active Deliveries
+
+                            </h2>
+
+                        </div>
+
+
+                        <strong>
+
+                            {
+                                activeDeliveries.length
+                            }
+
+                            {" "}Active
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <div className="delivery-grid">
+
+
+                        {activeDeliveries.length === 0 ? (
+
+                            <div className="empty-delivery-card">
+
+                                <Truck size={30} />
+
+                                <p>
+
+                                    No active deliveries found.
+
+                                </p>
+
+                            </div>
+
+                        ) : (
+
+                            activeDeliveries.map(
+                                delivery => (
+
+                                    <div
+
+                                        key={
+                                            delivery.deliveryPartnerId
+                                        }
+
+                                        className="delivery-card active-delivery-card"
+
+                                    >
+
+                                        <div className="delivery-card-top">
+
+                                            <div className="delivery-icon">
+
+                                                <Truck size={22} />
+
+                                            </div>
+
+
+                                            <span className="active-badge">
+
+                                                ACTIVE
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <h3>
+
+                                            {
+                                                delivery.deliveryPartnerName
+                                            }
+
+                                        </h3>
+
+
+                                        <p>
+
+                                            Order #
+
+                                            {
+                                                delivery.orderId
+                                            }
+
+                                        </p>
+
+
+                                        <p>
+
+                                            {
+                                                delivery.phoneNumber
+                                            }
+
+                                        </p>
+
+
+
+                                        {/* CURRENT STATUS */}
+
+                                        <div className="delivery-current-status">
+
+                                            Current Status
+
+                                            <strong>
+
+                                                {
+                                                    delivery.deliveryStatus
+                                                }
+
+                                            </strong>
+
+                                        </div>
+
+
+
+                                        {/* ASSIGNED */}
+
+                                        {
+
+                                            delivery.deliveryStatus ===
+                                            "ASSIGNED"
+
+                                            && (
+
+                                                <button
+
+                                                    className="status-button"
+
+                                                    onClick={() =>
+
+                                                        handleStatusUpdate(
+
+                                                            delivery.deliveryPartnerId,
+
+                                                            "PICKED_UP"
+
+                                                        )
+
+                                                    }
+
+                                                >
+
+                                                    Mark as Picked Up
+
+                                                </button>
+
+                                            )
+
+                                        }
+
+
+
+                                        {/* PICKED UP */}
+
+                                        {
+
+                                            delivery.deliveryStatus ===
+                                            "PICKED_UP"
+
+                                            && (
+
+                                                <button
+
+                                                    className="status-button"
+
+                                                    onClick={() =>
+
+                                                        handleStatusUpdate(
+
+                                                            delivery.deliveryPartnerId,
+
+                                                            "ON_THE_WAY"
+
+                                                        )
+
+                                                    }
+
+                                                >
+
+                                                    Start Delivery
+
+                                                </button>
+
+                                            )
+
+                                        }
+
+
+
+                                        {/* ON THE WAY */}
+
+                                        {
+
+                                            delivery.deliveryStatus ===
+                                            "ON_THE_WAY"
+
+                                            && (
+
+                                                <button
+
+                                                    className="status-button"
+
+                                                    onClick={() =>
+
+                                                        handleStatusUpdate(
+
+                                                            delivery.deliveryPartnerId,
+
+                                                            "DELIVERED"
+
+                                                        )
+
+                                                    }
+
+                                                >
+
+                                                    <CheckCircle
+                                                        size={17}
+                                                    />
+
+                                                    Mark as Delivered
+
+                                                </button>
+
+                                            )
+
+                                        }
+
+                                    </div>
+
+                                )
+
+                            )
+
+                        )}
+
+
+                    </div>
+
+                </section>
+
+
+            </div>
 
         </main>
 

@@ -4,6 +4,9 @@ import com.quickbyte.dto.Request.FoodRequest;
 import com.quickbyte.dto.Response.FoodResponse;
 import com.quickbyte.entity.Category.Category;
 import com.quickbyte.entity.Food.Food;
+import com.quickbyte.entity.Food.FoodImage;
+
+import java.util.Comparator;
 
 public class FoodMapper {
 
@@ -28,6 +31,40 @@ public class FoodMapper {
 
     public static FoodResponse toResponse(Food food) {
 
+        String imageUrl = null;
+
+        if (food.getImages() != null &&
+                !food.getImages().isEmpty()) {
+
+            /*
+             * First preference:
+             * Image marked as thumbnail
+             */
+            imageUrl = food.getImages()
+                    .stream()
+                    .filter(image ->
+                            Boolean.TRUE.equals(
+                                    image.getThumbnail()))
+                    .min(Comparator.comparing(
+                            FoodImage::getDisplayOrder))
+                    .map(FoodImage::getImageUrl)
+                    .orElse(null);
+
+            /*
+             * If no thumbnail exists,
+             * use the first image based on display order
+             */
+            if (imageUrl == null) {
+
+                imageUrl = food.getImages()
+                        .stream()
+                        .min(Comparator.comparing(
+                                FoodImage::getDisplayOrder))
+                        .map(FoodImage::getImageUrl)
+                        .orElse(null);
+            }
+        }
+
         return FoodResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
@@ -42,6 +79,7 @@ public class FoodMapper {
                 .categoryId(food.getCategory().getId())
                 .categoryName(food.getCategory().getName())
                 .price(food.getPrice())
+                .imageUrl(imageUrl)
                 .build();
     }
 }

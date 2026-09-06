@@ -107,6 +107,12 @@ export function CartProvider({
               item.quantity ?? 1;
 
             const image =
+              item.imageUrl ||
+              item.food?.images?.find(
+                (imageItem) =>
+                  imageItem?.thumbnail &&
+                  imageItem?.imageUrl
+              )?.imageUrl ||
               item.food?.images?.find(
                 (imageItem) =>
                   imageItem?.imageUrl
@@ -130,6 +136,11 @@ export function CartProvider({
               name:
                 foodName,
 
+              variantName:
+                item.variantType ??
+                item.variant?.variantType ??
+                null,
+
               price:
                 Number(unitPrice),
 
@@ -140,7 +151,7 @@ export function CartProvider({
                 Number(
                   item.totalPrice ??
                   Number(unitPrice) *
-                    Number(quantity)
+                  Number(quantity)
                 ),
 
               image,

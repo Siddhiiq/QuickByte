@@ -6,6 +6,8 @@ import com.quickbyte.dto.Request.UserRegistrationRequest;
 import com.quickbyte.dto.Response.LoginResponse;
 import com.quickbyte.dto.Response.RefreshTokenResponse;
 import com.quickbyte.dto.Response.UserResponse;
+import java.util.List;
+
 
 public interface UserService {
 
@@ -19,4 +21,7 @@ public interface UserService {
     void logout(Long userId);
 
     UserResponse getUserById(Long id);
+
+    List<UserResponse> getAllUsers();
+
 }

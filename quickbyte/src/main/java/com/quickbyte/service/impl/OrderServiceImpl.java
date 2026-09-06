@@ -173,6 +173,35 @@ public class OrderServiceImpl implements OrderService {
         return OrderMapper.toResponse(savedOrder);
 
     }
+
+
+    @Override
+    public List<OrderResponse> getOrdersByStatus(
+            String status) {
+
+        OrderStatus orderStatus;
+
+        try {
+
+            orderStatus =
+                    OrderStatus.valueOf(
+                            status.toUpperCase()
+                    );
+
+        } catch (IllegalArgumentException exception) {
+
+            throw new IllegalArgumentException(
+                    "Invalid order status: " + status
+            );
+
+        }
+
+        return orderRepository
+                .findByOrderStatus(orderStatus)
+                .stream()
+                .map(OrderMapper::toResponse)
+                .toList();
+    }
     @Override
     public OrderResponse getOrder(Long orderId) {
 

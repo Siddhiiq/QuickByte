@@ -41,6 +41,14 @@ public class OrderController {
 
         return orderService.getAllOrders();
     }
+
+    @GetMapping("/status/{status}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderResponse> getOrdersByStatus(
+            @PathVariable String status) {
+
+        return orderService.getOrdersByStatus(status);
+    }
     /**
      * Get Order By Id
      */

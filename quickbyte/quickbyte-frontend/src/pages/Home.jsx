@@ -33,6 +33,8 @@ import {
     getFoodsByCategory,
 } from "../api/foodApi";
 
+import "../styles.css"
+
 
 /* =========================================================
    FOOD IMAGES
