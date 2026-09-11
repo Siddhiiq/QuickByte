@@ -26,6 +26,10 @@ import {
 } from "../api/restaurantApi";
 
 import {
+    getRestaurantImages,
+} from "../api/restaurantImageApi";
+
+import {
     getCategoriesByRestaurant,
 } from "../api/categoryApi";
 
@@ -176,8 +180,6 @@ const RESTAURANT_IMAGES = [
     "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1000&q=85",
 
     "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1000&q=85",
-
-    "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=85",
 
     "https://images.unsplash.com/photo-1579684947550-22e945225d9a?auto=format&fit=crop&w=1000&q=85",
 ];
@@ -411,9 +413,7 @@ function normalizeRestaurant(
         imageUrl:
             restaurant?.imageUrl ||
             restaurant?.image ||
-            RESTAURANT_IMAGES[
-            index % RESTAURANT_IMAGES.length
-                ],
+            null,
     };
 }
 
@@ -518,34 +518,70 @@ export default function Home() {
     ===================================================== */
 
     const loadRestaurants = async () => {
-        try {
-            setLoading(true);
+    try {
+        setLoading(true);
 
-            const response =
-                await getRestaurants();
+        const response = await getRestaurants();
 
-            const data =
-                Array.isArray(response?.data)
-                    ? response.data
-                    : response?.data?.content || [];
+        const data =
+            Array.isArray(response?.data)
+                ? response.data
+                : response?.data?.content || [];
 
-            setRestaurants(
-                data.map(normalizeRestaurant)
-            );
+        const restaurantsWithImages = await Promise.all(
+            data.map(async (restaurant) => {
+                try {
+                    const imageResponse =
+                        await getRestaurantImages(restaurant.id);
 
-        } catch (error) {
-            console.error(
-                "Failed to load restaurants:",
-                error
-            );
+                    const images =
+                        Array.isArray(imageResponse?.data)
+                            ? imageResponse.data
+                            : [];
 
-            setRestaurants([]);
+                    const thumbnail =
+                        images.find(
+                            (image) => image.thumbnail === true
+                        ) || images[0];
 
-        } finally {
-            setLoading(false);
-        }
-    };
+                    return {
+                        ...restaurant,
+                        imageUrl:
+                            thumbnail?.imageUrl || null,
+                    };
 
+                } catch (error) {
+                    console.error(
+                        `Failed to load image for restaurant ${restaurant.id}:`,
+                        error
+                    );
+
+                    return {
+                        ...restaurant,
+                        imageUrl: null,
+                    };
+                }
+            })
+        );
+
+        setRestaurants(
+            restaurantsWithImages.map(
+                normalizeRestaurant
+            )
+        );
+
+    } catch (error) {
+        console.error(
+            "Failed to load restaurants:",
+            error
+        );
+
+        setRestaurants([]);
+
+    } finally {
+        setLoading(false);
+    }
+};
 
     /* =====================================================
        LOAD FOODS
@@ -1249,16 +1285,12 @@ export default function Home() {
                                             <div className="restaurant-image-home">
 
                                                 <img
-                                                    src={
-                                                        restaurant.imageUrl ||
-                                                        RESTAURANT_IMAGES[
-                                                        index %
-                                                        RESTAURANT_IMAGES.length
-                                                            ]
-                                                    }
-                                                    alt={restaurant.name}
-                                                />
-
+    src={
+        restaurant.imageUrl ||
+        "https://placehold.co/800x500?text=Restaurant"
+    }
+    alt={restaurant.name}
+/>
                                                 <span className="delivery-pill">
                           <Bike size={13} />
                           25-35 min

@@ -120,7 +120,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/food-variants/**")
                                 .permitAll()
 
+
                                 .requestMatchers(HttpMethod.GET, "/api/v1/food-images/**")
+                                .permitAll()
+                                
+                                .requestMatchers(HttpMethod.GET, "/api/v1/restaurant-images/**")
                                 .permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/food-addons/**")
