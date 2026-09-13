@@ -90,3 +90,4 @@ Thumbs.db
 # ZIP backups
 # =========================================================
 *.zip
+docker/postgres/init/01_create_user.sql
